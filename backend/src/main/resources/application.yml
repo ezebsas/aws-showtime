@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: tacs-grupo2-api
+logging:
+  level:
+    com:
+      tacs:
+        grupo2: DEBUG
