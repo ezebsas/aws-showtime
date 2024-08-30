@@ -4,9 +4,10 @@ import lombok.Data;
 
 @Data
 public class EventSeat {
-    private Integer id;
-    private EventSection section;
-    private Seat seat;
+    private String id;
+    private String seatId;
+    private String eventSectionId;
+    private String eventId;
     private EventSeatStatus status;
-    private EndUser endUser;
+    private String endUserId;
 }
