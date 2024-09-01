@@ -125,4 +125,10 @@ public class EventService {
     public List<Event> getEvents() {
         return events;
     }
+
+    public BigDecimal getTotalPrice(Ticket ticket) {
+        return calculateTotalPrice(ticket);
+    }
+
+    
 }
