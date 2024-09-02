@@ -29,7 +29,7 @@ public class StatisticsService {
 
         statisticsDTO.setTotalTicketsSold(tickets.size());
         statisticsDTO.setTotalRevenue(tickets.stream()
-            .map(ticket -> eventService.getTotalPrice(ticket))
+            .map(ticket -> eventService.calculateTotalPrice(ticket))
             .mapToDouble(price -> price.doubleValue()) 
             .sum());
 
@@ -45,8 +45,8 @@ public class StatisticsService {
 
             long revenue = tickets.stream()
                 .filter(ticket -> ticket.getEventId().equals(event.getId()))
-                .map(ticket -> eventService.getTotalPrice(ticket))
-                .map(BigDecimal::longValue) // Conversion en long
+                .map(ticket -> eventService.calculateTotalPrice(ticket))
+                .map(BigDecimal::longValue)
                 .reduce(0L, Long::sum);
             revenuePerEvent.put(event.getName(), revenue);
         }

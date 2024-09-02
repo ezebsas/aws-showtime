@@ -115,7 +115,7 @@ public class EventService {
         eventToClose.setStatus(EventStatus.CLOSED);
     }
 
-    private BigDecimal calculateTotalPrice(Ticket ticket) {
+    public BigDecimal calculateTotalPrice(Ticket ticket) {
         var eventSection = events.stream().filter(event -> event.getId().equals(ticket.getEventId()))
                 .flatMap(event -> event.getSections().stream().filter(section -> section.getId().equals(ticket.getEventSectionId())))
                 .findFirst().orElseThrow();
@@ -126,9 +126,6 @@ public class EventService {
         return events;
     }
 
-    public BigDecimal getTotalPrice(Ticket ticket) {
-        return calculateTotalPrice(ticket);
-    }
 
     
 }
