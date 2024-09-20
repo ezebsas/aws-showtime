@@ -22,7 +22,7 @@ const Ticket = () => {
   }, [id]);
 
   if (!ticket) {
-    return <div>Chargement...</div>;
+    return <div>Charging...</div>;
   }
 
   return (

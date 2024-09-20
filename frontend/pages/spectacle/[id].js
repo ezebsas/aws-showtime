@@ -42,17 +42,19 @@ const SpectaclePage = () => {
   }
 
   return (
-    <div className="container">
+    <>
       <Header />
-      <div className="spectacle-details">
-        <img src={spectacle.image} alt={spectacle.title} className="spectacle-image" />
-        <h2>{spectacle.title}</h2>
-        <p>Date: {spectacle.date}</p>
-        <p>Price: {spectacle.price} €</p>
-        <p>{spectacle.description}</p>
-        <button>Add to cart</button>
+      <div className="container">
+        <div className="spectacle-details">
+          <img src={spectacle.image} alt={spectacle.title} className="spectacle-image" />
+          <h2>{spectacle.title}</h2>
+          <p>Date: {spectacle.date}</p>
+          <p>Price: {spectacle.price} €</p>
+          <p>{spectacle.description}</p>
+          <button>Add to cart</button>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
