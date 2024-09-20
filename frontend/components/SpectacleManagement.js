@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
-import Header from '../components/Header';
-import SpectacleList from '../components/SpectacleList';
+import SpectacleListAdmin from './SpectacleListAdmin';
 import '../styles/globals.css';
 
 const Home = () => {
@@ -11,11 +10,11 @@ const Home = () => {
       const data = [
         {
           id: '1',
-          title: 'Rock concert',
+          title: 'Rock Concert',
           date: '2023-12-01',
           price: 50,
           image: '/images/rock.jpeg',
-          description: 'Event description.'
+          description: 'An electrifying rock concert with the best groups of the current scene.'
         },
         {
           id: '2',
@@ -23,7 +22,7 @@ const Home = () => {
           date: '2023-11-15',
           price: 30,
           image: '/images/teatro.jpeg',
-          description: 'Event description.'
+          description: 'A captivating theatre play that explores the themes of love and betrayal.'
         },
       ];
       setSpectacles(data);
@@ -34,8 +33,7 @@ const Home = () => {
 
   return (
     <div className="container">
-      <Header />
-      <SpectacleList spectacles={spectacles} />
+      <SpectacleListAdmin spectacles={spectacles} />
     </div>
   );
 };

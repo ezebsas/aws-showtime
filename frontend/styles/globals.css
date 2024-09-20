@@ -14,7 +14,7 @@ body {
 }
 
 header {
-  background-color: #720b0b;
+  background-color: #940b0b;
   color: white;
   padding: 20px;
   text-align: center;
@@ -26,7 +26,7 @@ h1, h2, h3 {
 }
 
 button {
-  background-color: #720b0b;
+  background-color: #940b0b;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -36,7 +36,7 @@ button {
 }
 
 button:hover {
-  background-color: #720b0b;
+  background-color: #2c2929;
 }
 
 .container {
@@ -48,3 +48,16 @@ button:hover {
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
+
+.spectacle-details {
+  text-align: center;
+}
+
+.spectacle-image {
+  width: 100%;
+  max-width: 300px;
+  height: auto;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+

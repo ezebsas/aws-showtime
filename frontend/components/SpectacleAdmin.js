@@ -1,13 +1,8 @@
-import Link from 'next/link';
 import { useCart } from '../context/CartContext';
 import styles from '../styles/spectacleList.module.css';
 
-const Spectacle = ({ id, title, date, price, image, description }) => {
+const SpectacleAdmin = ({ id, title, date, price, image, description, handleDelete }) => {
   const { addToCart } = useCart();
-
-  const handleAddToCart = () => {
-    addToCart({ id, title, date, price, image, description });
-  };
 
   return (
     <div className={styles.spectacle}>
@@ -17,11 +12,9 @@ const Spectacle = ({ id, title, date, price, image, description }) => {
       <p className={styles.spectaclePrice}>Price: {price} €</p>
       <p className={styles.spectacleDescription}>{description}</p>
 
-      <Link href={`/spectacle/${id}`} legacyBehavior>
-        <button className={styles.button} onClick={handleAddToCart}>See more</button>
-      </Link>
+      <button className={styles.deleteButton} onClick={() => handleDelete(id)}>Delete</button>
     </div>
   );
 };
 
-export default Spectacle;
+export default SpectacleAdmin;

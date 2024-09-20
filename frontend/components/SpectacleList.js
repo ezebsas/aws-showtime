@@ -1,11 +1,10 @@
-// components/SpectacleList.js
 import Spectacle from './Spectacle';
-import styles from './SpectacleList.module.css';
+import styles from '../styles/spectacleList.module.css';
 
 const SpectacleList = ({ spectacles }) => {
   return (
     <div className={styles.spectacleList}>
-      <h2>Liste des spectacles</h2>
+      <h2>List of events</h2>
       {spectacles.map((spectacle, index) => (
         <Spectacle key={index} {...spectacle} />
       ))}
