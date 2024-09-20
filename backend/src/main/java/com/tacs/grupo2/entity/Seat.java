@@ -1,15 +1,28 @@
 package com.tacs.grupo2.entity;
 
+import jakarta.persistence.*;
+import lombok.*;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import java.util.List;
 
-@Data
-@NoArgsConstructor
+@Builder
+@Value
+@Entity
+@Table(name = "seats")
+@NoArgsConstructor(force = true)
 @AllArgsConstructor
 public class Seat {
-    private String id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private Integer number;
     private String row;
+
+    @ManyToOne
+    @JoinColumn(name = "section_id")
+    private Section section;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "seat_id")
+    private List<EventSeat> eventSeats;
 }
