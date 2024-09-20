@@ -3,6 +3,8 @@ package com.tacs.grupo2.service;
 import com.tacs.grupo2.dto.EventCreationDTO;
 import com.tacs.grupo2.dto.TicketCreationDTO;
 import com.tacs.grupo2.entity.*;
+import com.tacs.grupo2.repository.VenueRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.testcontainers.shaded.org.apache.commons.lang3.RandomStringUtils;
@@ -13,46 +15,16 @@ import java.util.List;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class EventService {
-    private static final List<User> users = List.of(
-            new User("1", "user1@test.com"),
-            new User("2", "user2@test.com")
-    );
-    private static final List<Venue> venues = List.of(
-            new Venue("1", "Estadio Único de La Plata", "La Plata", "Av. 25 300", List.of(
-                    new Section("1", "Popular", List.of(
-                            new Seat("1", 1, "A"),
-                            new Seat("2", 2, "B"),
-                            new Seat("3", 3, "C"),
-                            new Seat("4", 4, "D")
-                    )),
-                    new Section("2", "Platea", List.of(
-                            new Seat("1", 1, "A"),
-                            new Seat("2", 2, "B"),
-                            new Seat("3", 3, "C"),
-                            new Seat("4", 4, "D")
-                    ))
-            )),
-            new Venue("2", "Estadio Monumental", "Buenos Aires", "Av. Pres. Figueroa Alcorta 7597", List.of(
-                    new Section("1", "Popular", List.of(
-                            new Seat("1", 1, "A"),
-                            new Seat("2", 2, "B"),
-                            new Seat("3", 3, "C"),
-                            new Seat("4", 4, "D")
-                    )),
-                    new Section("2", "Platea", List.of(
-                            new Seat("1", 1, "A"),
-                            new Seat("2", 2, "B"),
-                            new Seat("3", 3, "C"),
-                            new Seat("4", 4, "D")
-                    ))
-            ))
-    );
+    private final VenueRepository venueRepository;
 
     private static final List<Event> events = new ArrayList<>();
     private static final List<Ticket> tickets = new ArrayList<>();
 
     public void createEvent(EventCreationDTO eventCreationDTO) {
+        Venue venue = venueRepository.findById(Long.valueOf(eventCreationDTO.getVenueId())).orElseThrow();
+        /*
         Venue venue = venues.stream().filter(v -> v.getId().equals(eventCreationDTO.getVenueId())).findFirst().orElseThrow();
         var event = new Event();
 
@@ -88,9 +60,11 @@ public class EventService {
         event.setDate(eventCreationDTO.getDate());
         event.setStatus(EventStatus.OPEN);
         events.add(event);
+        */
     }
 
     public void createTicket(TicketCreationDTO ticketDetails) {
+        /*
         // Por ahora hardcodeado. La idea es que se obtenga del token del usuario logueado
         var endUser = users.stream().filter(user -> user.getId().equals(ticketDetails.getUserId())).findFirst().orElseThrow();
         var ticket = new Ticket();
@@ -104,22 +78,26 @@ public class EventService {
         ticket.setEventId(ticketDetails.getEventId());
         ticket.setTotal(calculateTotalPrice(ticket));
         tickets.add(ticket);
+
+         */
     }
 
     public List<Ticket> getTickets(String userId) {
-        return tickets.stream().filter(ticket -> ticket.getEndUserId().equals(userId)).toList();
+        //return tickets.stream().filter(ticket -> ticket.getEndUserId().equals(userId)).toList();
+        return new ArrayList<>();
     }
 
     public void closeEvent(String eventId) {
-        var eventToClose = events.stream().filter(event -> event.getId().equals(eventId)).findFirst().orElseThrow();
-        eventToClose.setStatus(EventStatus.CLOSED);
+//        var eventToClose = events.stream().filter(event -> event.getId().equals(eventId)).findFirst().orElseThrow();
+//        eventToClose.setStatus(EventStatus.CLOSED);
     }
 
     public BigDecimal calculateTotalPrice(Ticket ticket) {
-        var eventSection = events.stream().filter(event -> event.getId().equals(ticket.getEventId()))
-                .flatMap(event -> event.getSections().stream().filter(section -> section.getId().equals(ticket.getEventSectionId())))
-                .findFirst().orElseThrow();
-        return eventSection.getPrice().multiply(BigDecimal.valueOf(ticket.getEventSeatIds().size()));
+//        var eventSection = events.stream().filter(event -> event.getId().equals(ticket.getEventId()))
+//                .flatMap(event -> event.getSections().stream().filter(section -> section.getId().equals(ticket.getEventSectionId())))
+//                .findFirst().orElseThrow();
+//        return eventSection.getPrice().multiply(BigDecimal.valueOf(ticket.getEventSeatIds().size()));
+        return BigDecimal.valueOf(0.0);
     }
 
     public List<Event> getEvents() {

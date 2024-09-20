@@ -32,6 +32,10 @@ public class ApplicationUser implements UserDetails {
     String password;
     @Enumerated(EnumType.STRING)
     Role role;
+    @OneToMany(mappedBy = "user")
+    List<EventSeat> eventSeats;
+    @OneToMany(mappedBy = "user")
+    List<Ticket> ticket;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
