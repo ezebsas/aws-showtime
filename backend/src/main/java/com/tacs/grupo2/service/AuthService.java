@@ -1,9 +1,9 @@
 package com.tacs.grupo2.service;
 
-import com.tacs.grupo2.dto.AuthResponse;
-import com.tacs.grupo2.dto.LoginRequest;
-import com.tacs.grupo2.dto.RegisterRequest;
-import com.tacs.grupo2.entity.ApplicationUser;
+import com.tacs.grupo2.dto.AuthResponseDTO;
+import com.tacs.grupo2.dto.LoginRequestDTO;
+import com.tacs.grupo2.dto.RegisterRequestDTO;
+import com.tacs.grupo2.entity.User;
 import com.tacs.grupo2.entity.Role;
 import com.tacs.grupo2.jwt.JwtService;
 import com.tacs.grupo2.repository.UserRepository;
@@ -22,29 +22,28 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
 
-    public AuthResponse login(LoginRequest request) {
+    public AuthResponseDTO login(LoginRequestDTO request) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
-        ApplicationUser user=userRepository.findByUsername(request.getUsername()).orElseThrow();
+        User user=userRepository.findByUsername(request.getUsername()).orElseThrow();
         String token=jwtService.getToken(user);
-        return AuthResponse.builder()
+        return AuthResponseDTO.builder()
                 .token(token)
                 .build();
 
     }
 
-    public AuthResponse register(RegisterRequest request) {
-        ApplicationUser user = ApplicationUser.builder()
-                .username(request.getUsername())
-                .password(passwordEncoder.encode( request.getPassword()))
-                .firstname(request.getFirstname())
-                .lastname(request.getLastname())
-                .country(request.getCountry())
-                .role(Role.USER)
-                .build();
+    public AuthResponseDTO register(RegisterRequestDTO request) {
+        User user = new User();
+                user.setUsername(request.getUsername());
+                user.setPassword(passwordEncoder.encode( request.getPassword()));
+                user.setFirstname(request.getFirstname());
+                user.setLastname(request.getLastname());
+                user.setCountry(request.getCountry());
+                user.setRole(Role.USER);
 
         userRepository.save(user);
 
-        return AuthResponse.builder()
+        return AuthResponseDTO.builder()
                 .token(jwtService.getToken(user))
                 .build();
 

@@ -9,10 +9,11 @@ import java.util.List;
 
 @Value
 @Builder(toBuilder = true)
-public class EventCreationDTO {
+public class EventDTO {
+    Long id;
     String name;
     LocalDateTime date;
-    String venueId;
     EventStatus status;
-    List<EventSectionCreationDTO> eventSections;
+    Long venueId;
+    List<EventSectionDTO> eventSections;
 }
