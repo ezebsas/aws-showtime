@@ -11,7 +11,7 @@ const Statistics = () => {
     // Fetch statistics data from API or local storage
     const fetchStats = async () => {
       try {
-        const response = await axios.get(`${config.url}statistics`);
+        const response = await axios.get(`${config.url}events/statistics`);
         setStats(response.data);
       } catch (error) {
         setError(error.message);

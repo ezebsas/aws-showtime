@@ -1,9 +1,11 @@
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import styles from '../styles/header.module.css';
+import { useAuth } from '../context/AuthContext';
 
 const Header = () => {
   const router = useRouter();
+  const {logout} = useAuth();
 
   return (
     <header className={styles.header}>
@@ -19,7 +21,7 @@ const Header = () => {
           <button className={styles.button}>Cart</button>
         </Link>
         <Link href="/login" legacyBehavior>
-          <button className={styles.button}>Logout</button>
+          <button className={styles.button} onClick={logout}>Logout</button>
         </Link>
       </nav>
     </header>

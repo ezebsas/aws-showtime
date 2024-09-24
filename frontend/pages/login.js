@@ -1,28 +1,34 @@
 import { useState } from 'react';
-import axios from 'axios';
-import Link from 'next/link';
+import { useAuth } from '../context/AuthContext'; // Importa el contexto de autenticación
+import { useRouter } from 'next/router'; // Para redirigir tras login
 import styles from '../styles/login.module.css';
 import LoginHeader from '../components/LoginHeader';
+import Link from 'next/link';
 
 const Login = () => {
+    const { login } = useAuth(); // Obtén la función de login desde el contexto
+    const router = useRouter();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setError(''); // Resetea el error antes de intentar el login
 
         try {
-            const res = await axios.post('/api/login', { email, password });
-            console.log(res.data);
+            await login(email, password); // Usa la función de login del contexto
+            router.push('/'); // Redirige al usuario tras login exitoso
         } catch (err) {
-            console.error(err);
+            setError('Login failed. Please check your credentials.');
         }
     };
 
     return (
         <div className={styles.container}>
             <LoginHeader />
-            <h2>Connexion</h2>
+            <h2>Login</h2>
+            {error && <p className={styles.error}>{error}</p>}
             <form onSubmit={handleSubmit} className={styles.form}>
                 <div className={styles.formGroup}>
                     <label htmlFor="email">Email:</label>
@@ -35,7 +41,7 @@ const Login = () => {
                     />
                 </div>
                 <div className={styles.formGroup}>
-                    <label htmlFor="password">Mot de passe:</label>
+                    <label htmlFor="password">Password:</label>
                     <input
                         type="password"
                         id="password"
@@ -44,9 +50,9 @@ const Login = () => {
                         className={styles.input}
                     />
                 </div>
-                <Link href="/" legacyBehavior>
-                    <button className={styles.button}>Connect</button>
-                </Link>
+                <button type="submit" className={styles.button}>
+                    Connect
+                </button>
             </form>
             <Link href="/signup" legacyBehavior>
                 <button className={styles.button}>Create an account</button>
