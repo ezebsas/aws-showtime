@@ -1,16 +1,32 @@
 package com.tacs.grupo2.entity;
 
-import lombok.Data;
+import jakarta.persistence.*;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.util.List;
 
 @Data
+@Builder
+@Entity
+@Table(name = "tickets")
+@NoArgsConstructor(force = true)
+@AllArgsConstructor
 public class Ticket {
-    private String id;
-    private String endUserId;
-    private String eventId;
-    private String eventSectionId;
-    private List<String> eventSeatIds;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private ApplicationUser user;
+    @ManyToOne
+    @JoinColumn(name = "event_id")
+    private Event event;
+    @ManyToOne
+    @JoinColumn(name = "event_section_id")
+    private EventSection eventSection;
+    @OneToOne
+    @JoinColumn(name = "event_seat_id")
+    private EventSeat eventSeat;
     private BigDecimal total;
 }
