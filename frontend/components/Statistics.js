@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import styles from '../styles/statistics.module.css';
+import config from '../config';
 
 const Statistics = () => {
   const [stats, setStats] = useState(null);
@@ -10,7 +11,7 @@ const Statistics = () => {
     // Fetch statistics data from API or local storage
     const fetchStats = async () => {
       try {
-        const response = await axios.get('/api/statistics');
+        const response = await axios.get(`${config.url}statistics`);
         setStats(response.data);
       } catch (error) {
         setError(error.message);

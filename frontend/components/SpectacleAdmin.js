@@ -4,6 +4,8 @@ import styles from '../styles/spectacleList.module.css';
 const SpectacleAdmin = ({ id, title, date, price, image, description, handleDelete }) => {
   const { addToCart } = useCart();
 
+  // TODO: Delete should be close?
+
   return (
     <div className={styles.spectacle}>
       <img src={image} alt={title} className={styles.spectacleImage} />

@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import axios from 'axios';
 import Header from '../../components/Header';
 import TicketDetail from '../../components/TicketDetail';
+import config from '../../config';
 
 const Ticket = () => {
   const router = useRouter();
@@ -13,7 +14,7 @@ const Ticket = () => {
   useEffect(() => {
     if (id) {
       const fetchTicket = async () => {
-        const response = await axios.get(`http://localhost:5000/api/tickets/${id}`);
+        const response = await axios.get(`${config.url}tickets/${id}`);
         setTicket(response.data);
       };
 
