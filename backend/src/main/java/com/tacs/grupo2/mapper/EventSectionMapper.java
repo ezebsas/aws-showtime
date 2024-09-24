@@ -7,6 +7,7 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring", uses = {EventSeatMapper.class, MapperHelper.class})
 public interface EventSectionMapper {
+    @Mapping(target = "ticket", ignore = true)
     @Mapping(target = "event", ignore = true)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "section", source = "sectionId", qualifiedByName = "toSection")
