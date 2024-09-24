@@ -7,7 +7,7 @@ import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import com.tacs.grupo2.entity.ApplicationUser;
+import com.tacs.grupo2.entity.User;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
@@ -21,11 +21,11 @@ public class JwtService {
     @Value("${spring.jwt.secret.key}")
     private String SECRET_KEY;
 
-    public String getToken(ApplicationUser user) {
+    public String getToken(User user) {
         return getToken(new HashMap<>(), user);
     }
 
-    private String getToken(Map<String,Object> extraClaims, ApplicationUser user) {
+    private String getToken(Map<String,Object> extraClaims, User user) {
         return Jwts
                 .builder()
                 .claims(extraClaims)

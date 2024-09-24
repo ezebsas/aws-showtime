@@ -7,7 +7,6 @@ import com.tacs.grupo2.service.EventService;
 import com.tacs.grupo2.service.StatisticsService;
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -20,11 +19,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class EventController {
     private final EventService eventService;
+    private final StatisticsService statisticsService;
 
-    @Autowired
-    private StatisticsService statisticsService;
-
-    //@PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<Void> createEvent(@RequestBody EventCreationDTO eventDetails) {
         eventService.createEvent(eventDetails);
@@ -37,7 +33,7 @@ public class EventController {
     }
 
     @PutMapping("/{eventId}/close")
-    public ResponseEntity<Void> closeEvent(@PathVariable String eventId) {
+    public ResponseEntity<Void> closeEvent(@PathVariable Long eventId) {
         eventService.closeEvent(eventId);
         return ResponseEntity.ok().build();
     }
