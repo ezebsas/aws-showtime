@@ -24,5 +24,9 @@ hs_err_pid*
 replay_pid*
 
 # environment specific files
+.env
 backend/.env
 .idea/
+
+# secrets
+secrets/

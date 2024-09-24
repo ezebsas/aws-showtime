@@ -2,14 +2,17 @@ package com.tacs.grupo2.dto;
 
 import com.tacs.grupo2.entity.Event;
 import com.tacs.grupo2.entity.EventSeat;
+import lombok.Builder;
 import lombok.Data;
+import lombok.Value;
 
 import java.util.List;
 
-@Data
+@Value
+@Builder(toBuilder = true)
 public class TicketCreationDTO {
-    private String eventId;
-    private String eventSectionId;
-    private String userId;
-    private List<String> seatIds;
+    String eventId;
+    String eventSectionId;
+    String userId;
+    List<String> seatIds;
 }

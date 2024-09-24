@@ -1,11 +1,15 @@
 package com.tacs.grupo2.dto;
 
-import lombok.Data;
+import lombok.Builder;
+import lombok.Value;
 
 import java.math.BigDecimal;
+import java.util.List;
 
-@Data
+@Value
+@Builder(toBuilder = true)
 public class EventSectionCreationDTO {
-    private String sectionId;
-    private BigDecimal price;
+    Long sectionId;
+    List<EventSeatCreationDTO> eventSeats;
+    BigDecimal price;
 }

@@ -1,8 +1,8 @@
 package com.tacs.grupo2.controller;
 
-import com.tacs.grupo2.dto.AuthResponse;
-import com.tacs.grupo2.dto.LoginRequest;
-import com.tacs.grupo2.dto.RegisterRequest;
+import com.tacs.grupo2.dto.AuthResponseDTO;
+import com.tacs.grupo2.dto.LoginRequestDTO;
+import com.tacs.grupo2.dto.RegisterRequestDTO;
 import com.tacs.grupo2.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,14 +18,14 @@ public class AuthController {
 
     private final AuthService authService;
 
-    @PostMapping(value = "login")
-    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request)
+    @PostMapping(value = "/login")
+    public ResponseEntity<AuthResponseDTO> login(@RequestBody LoginRequestDTO request)
     {
         return ResponseEntity.ok(authService.login(request));
     }
 
-    @PostMapping(value = "register")
-    public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest request)
+    @PostMapping(value = "/register")
+    public ResponseEntity<AuthResponseDTO> register(@RequestBody RegisterRequestDTO request)
     {
         return ResponseEntity.ok(authService.register(request));
     }
