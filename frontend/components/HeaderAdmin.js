@@ -6,7 +6,7 @@ const HeaderAdmin = ({ setSelectedComponent }) => {
     <header className={styles.header}>
       <nav className={styles.nav}>
         <Link href="/logout" legacyBehavior>
-          <button className={styles.button}>Deconnexion</button>
+          <button className={styles.button}>Disconnection</button>
         </Link>
         <button className={styles.button} onClick={() => setSelectedComponent('statistics')}>Statistics</button>
         <button className={styles.button} onClick={() => setSelectedComponent('events')}>Event management</button>

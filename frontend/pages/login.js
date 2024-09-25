@@ -22,7 +22,7 @@ const Login = () => {
     return (
         <div className={styles.container}>
             <LoginHeader />
-            <h2>Connexion</h2>
+            <h2>Connection</h2>
             <form onSubmit={handleSubmit} className={styles.form}>
                 <div className={styles.formGroup}>
                     <label htmlFor="email">Email:</label>

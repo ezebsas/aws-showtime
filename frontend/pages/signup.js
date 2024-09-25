@@ -28,7 +28,7 @@ const Signup = () => {
     return (
         <div className={styles.container}>
             <LoginHeader />
-            <h2>Créer un compte</h2>
+            <h2>Create an account</h2>
             <form onSubmit={handleSubmit} className={styles.form}>
                 <div className={styles.formGroup}>
                     <label htmlFor="email">Email:</label>
@@ -41,7 +41,7 @@ const Signup = () => {
                     />
                 </div>
                 <div className={styles.formGroup}>
-                    <label htmlFor="password">Pasword</label>
+                    <label htmlFor="password">Password</label>
                     <input
                         type="password"
                         id="password"
