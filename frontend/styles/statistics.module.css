@@ -1,0 +1,10 @@
+/* styles/statistics.module.css */
+.statistics {
+    margin: 20px;
+  }
+  
+  .error {
+    color: red;
+    margin-top: 10px;
+  }
+  

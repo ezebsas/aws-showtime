@@ -1,0 +1,43 @@
+/* styles/events.module.css */
+.eventsList {
+    margin: 20px;
+  }
+  
+  .addButton {
+    background-color: #940b0b;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 5px 10px;
+    margin-bottom: 10px;
+  }
+  
+  .events {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .event {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  .eventTitle {
+    font-size: 18px;
+    font-weight: bold;
+  }
+  
+  .deleteButton {
+    background-color: #940b0b;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 5px 10px;
+  }
+  

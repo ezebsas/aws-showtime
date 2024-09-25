@@ -1,0 +1,28 @@
+/* styles/header.module.css */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: #000000;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.nav {
+  display: flex;
+  gap: 10px;
+}
+
+.button {
+  padding: 5px 10px;
+  background-color: #940b0b;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
