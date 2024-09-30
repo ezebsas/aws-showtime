@@ -5,12 +5,12 @@ import lombok.Value;
 import java.time.LocalDateTime;
 
 @Value
-public class ErrorResponseDTO {
+public class ErrorResponseDTO<T> {
     private final LocalDateTime timestamp;
     private final int status;
-    private final String error;
+    private final T error;
 
-    public ErrorResponseDTO(int status, String error) {
+    public ErrorResponseDTO(int status, T error) {
         this.timestamp = LocalDateTime.now();
         this.status = status;
         this.error = error;

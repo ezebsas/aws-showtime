@@ -2,6 +2,7 @@ package com.tacs.grupo2.controller;
 
 import com.tacs.grupo2.dto.TicketCreationDTO;
 import com.tacs.grupo2.dto.TicketDTO;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
@@ -22,7 +23,7 @@ public class TicketController {
     private final EventService eventService;
 
     @PostMapping
-    public ResponseEntity<EntityModel<TicketDTO>> createTicket(@RequestBody TicketCreationDTO ticketDetails) {
+    public ResponseEntity<EntityModel<TicketDTO>> createTicket(@RequestBody @Valid TicketCreationDTO ticketDetails) {
         TicketDTO ticket = eventService.createTicket(ticketDetails);
         WebMvcLinkBuilder location = linkTo(methodOn(TicketController.class).getTicket(ticket.getId()));
         return ResponseEntity.created(location.toUri()).body(EntityModel.of(ticket, location.withSelfRel()));
