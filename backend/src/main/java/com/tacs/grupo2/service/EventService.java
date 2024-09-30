@@ -5,6 +5,7 @@ import com.tacs.grupo2.dto.EventDTO;
 import com.tacs.grupo2.dto.TicketCreationDTO;
 import com.tacs.grupo2.dto.TicketDTO;
 import com.tacs.grupo2.entity.*;
+import com.tacs.grupo2.exceptions.EntityNotFoundException;
 import com.tacs.grupo2.mapper.EventMapper;
 import com.tacs.grupo2.mapper.TicketMapper;
 import com.tacs.grupo2.repository.EventRepository;
@@ -51,10 +52,10 @@ public class EventService {
     }
 
     public EventDTO getEvent(Long eventId) {
-        return eventMapper.toDTO(eventRepository.findById(eventId).orElseThrow());
+        return eventMapper.toDTO(eventRepository.findById(eventId).orElseThrow(() -> new EntityNotFoundException("Event with id: " + eventId + " doesn't exist")));
     }
 
     public TicketDTO getTicket(Long ticketId) {
-        return ticketMapper.toDTO(ticketRepository.findById(ticketId).orElseThrow());
+        return ticketMapper.toDTO(ticketRepository.findById(ticketId).orElseThrow(() -> new EntityNotFoundException("Ticket with id: " + ticketId + " doesn't exist")));
     }
 }
