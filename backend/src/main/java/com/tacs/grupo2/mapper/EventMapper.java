@@ -11,4 +11,7 @@ public interface EventMapper {
     @Mapping(target = "venue", source = "venueId", qualifiedByName = "toVenue")
     @Mapping(target = "id", ignore = true)
     Event toEvent(EventCreationDTO eventCreationDTO);
+
+    @Mapping(target = "venueId", source = "venue.id")
+    EventDTO toDTO(Event event);
 }

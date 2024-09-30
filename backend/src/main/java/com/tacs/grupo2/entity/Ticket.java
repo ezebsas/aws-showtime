@@ -5,6 +5,7 @@ import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Objects;
 
 @Getter
@@ -21,11 +22,25 @@ public class Ticket {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
-    @OneToOne
-    @JoinColumn(name = "event_seat_id", nullable = false)
-    private EventSeat eventSeat;
+    @OneToMany(mappedBy = "ticket")
+    @ToString.Exclude
+    private List<EventSeat> eventSeats;
     @Column(nullable = false)
     private BigDecimal total;
+
+    public void calculateTotalPrice() {
+         this.total = this.eventSeats.stream()
+                 .reduce(BigDecimal.ZERO,
+                         (subtotal, eventSeat) -> subtotal.add(eventSeat.getEventSection().getPrice()), BigDecimal::add
+                 );
+    }
+
+    @PrePersist
+    public void prePersist() {
+        if(this.total == null) {
+            calculateTotalPrice();
+        }
+    }
 
     @Override
     public final boolean equals(Object o) {
