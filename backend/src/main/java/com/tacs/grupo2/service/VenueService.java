@@ -17,9 +17,9 @@ public class VenueService {
     private final VenueMapper venueMapper;
 
     @Transactional
-    public void createVenue(VenueCreationDTO venueCreationDTO) {
+    public VenueDTO createVenue(VenueCreationDTO venueCreationDTO) {
         var venue = venueMapper.toVenue(venueCreationDTO);
-        venueRepository.save(venue);
+        return venueMapper.toDTO(venueRepository.save(venue));
     }
 
     public List<VenueDTO> getVenues() {

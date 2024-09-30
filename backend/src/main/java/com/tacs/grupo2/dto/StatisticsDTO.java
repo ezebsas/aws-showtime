@@ -1,7 +1,6 @@
 package com.tacs.grupo2.dto;
 
 import lombok.Builder;
-import lombok.Data;
 import lombok.Value;
 
 import java.util.Map;

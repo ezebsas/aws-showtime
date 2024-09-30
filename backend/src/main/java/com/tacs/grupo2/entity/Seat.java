@@ -24,7 +24,7 @@ public class Seat {
     @ManyToOne
     @JoinColumn(name = "section_id")
     private Section section;
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "seat", cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
     private List<EventSeat> eventSeats;
 

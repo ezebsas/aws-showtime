@@ -20,7 +20,7 @@ import java.util.Objects;
 public class User implements UserDetails {
     @Id
     @GeneratedValue
-    private Integer id;
+    private Long id;
     @Column(nullable = false, unique = true)
     private String username;
     @Column(nullable = false)
@@ -32,10 +32,7 @@ public class User implements UserDetails {
     private Role role;
     @OneToMany(mappedBy = "user")
     @ToString.Exclude
-    private List<EventSeat> eventSeats;
-    @OneToMany(mappedBy = "user")
-    @ToString.Exclude
-    private List<Ticket> ticket;
+    private List<Ticket> tickets;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

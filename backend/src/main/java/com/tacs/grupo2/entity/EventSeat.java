@@ -25,9 +25,7 @@ public class EventSeat {
     @Column(nullable = false)
     private EventSeatStatus status;
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "ticket_id")
     private Ticket ticket;
 
     @Override

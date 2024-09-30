@@ -15,6 +15,8 @@ public class MapperHelper {
     private final VenueRepository venueRepository;
     private final SeatRepository seatRepository;
     private final EventSectionRepository eventSectionRepository;
+    private final EventSeatRepository eventSeatRepository;
+    private final UserRepository userRepository;
 
     @Named("toSection")
     public Section toSection(Long sectionId) {
@@ -40,9 +42,21 @@ public class MapperHelper {
                 .orElseThrow(() -> new IllegalArgumentException("Invalid seat ID: " + seatId));
     }
 
+    @Named("toEventSeat")
+    public EventSeat toEventSeat(Long eventSeatId) {
+        return eventSeatRepository.findById(eventSeatId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid seat ID: " + eventSeatId));
+    }
+
     @Named("toEventSectionId")
     public EventSection toEventSection(Long eventSectionId) {
         return eventSectionRepository.findById(eventSectionId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid event section ID: " + eventSectionId ));
+    }
+
+    @Named("toUser")
+    public User toUser(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid user ID: " + userId));
     }
 }

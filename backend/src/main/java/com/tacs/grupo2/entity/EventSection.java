@@ -29,9 +29,6 @@ public class EventSection {
     @ToString.Exclude
     private List<EventSeat> eventSeats;
     private BigDecimal price;
-    @OneToMany
-    @ToString.Exclude
-    List<Ticket> ticket;
 
     @Override
     public final boolean equals(Object o) {
