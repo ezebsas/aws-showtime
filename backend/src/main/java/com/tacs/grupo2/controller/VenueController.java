@@ -4,6 +4,7 @@ import com.tacs.grupo2.dto.VenueCreationDTO;
 import com.tacs.grupo2.dto.VenueDTO;
 import com.tacs.grupo2.dto.assembler.VenueModelAssembler;
 import com.tacs.grupo2.service.VenueService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
@@ -24,7 +25,7 @@ public class VenueController {
     private final VenueModelAssembler assembler;
 
     @PostMapping
-    public ResponseEntity<EntityModel<VenueDTO>> createVenue(@RequestBody VenueCreationDTO venueCreationDTO) {
+    public ResponseEntity<EntityModel<VenueDTO>> createVenue(@RequestBody @Valid VenueCreationDTO venueCreationDTO) {
         var venue = venueService.createVenue(venueCreationDTO);
         WebMvcLinkBuilder location = linkTo(methodOn(VenueController.class).getVenue(venue.getId()));
         return ResponseEntity.created(location.toUri()).body(EntityModel.of(venue, location.withSelfRel()));

@@ -5,12 +5,14 @@ import com.tacs.grupo2.dto.EventDTO;
 import com.tacs.grupo2.dto.StatisticsDTO;
 import com.tacs.grupo2.service.EventService;
 import com.tacs.grupo2.service.StatisticsService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -26,7 +28,7 @@ public class EventController {
     private final StatisticsService statisticsService;
 
     @PostMapping
-    public ResponseEntity<EntityModel<EventDTO>> createEvent(@RequestBody EventCreationDTO eventCreationDTO) {
+    public ResponseEntity<EntityModel<EventDTO>> createEvent(@RequestBody @Valid EventCreationDTO eventCreationDTO) {
         EventDTO event = eventService.createEvent(eventCreationDTO);
         WebMvcLinkBuilder location = linkTo(methodOn(EventController.class).getEvent(event.getId()));
         return ResponseEntity.created(location.toUri()).body(EntityModel.of(event, location.withSelfRel()));
@@ -43,6 +45,7 @@ public class EventController {
     }
 
     @PutMapping("/{eventId}/close")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> closeEvent(@PathVariable Long eventId) {
         eventService.closeEvent(eventId);
         return ResponseEntity.ok().build();
