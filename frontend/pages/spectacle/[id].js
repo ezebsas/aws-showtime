@@ -51,7 +51,7 @@ const SpectaclePage = () => {
           <p>Date: {spectacle.date}</p>
           <p>Price: {spectacle.price} €</p>
           <p>{spectacle.description}</p>
-          <button>Add to cart</button>
+          <button onClick={()=>{router.push(`/buy-ticket/${id}`)}}>Buy ticket</button>
         </div>
       </div>
     </>
