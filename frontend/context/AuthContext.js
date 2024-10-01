@@ -14,16 +14,17 @@ export const AuthProvider = ({ children }) => {
   const [jwt, setJwt] = useState(null);
   const router = useRouter();
 
-  // useEffect(()=>{
-  //   const jwtStore = localStorage.getItem('jwt')
-  //   if(!jwtStore){
-  //     router.push('login');
-  //   }
-  // },[]);
+  useEffect(()=>{
+    const jwtStore = localStorage.getItem('jwt')
+    if(jwtStore) setJwt(jwtStore);
+    // if(!jwtStore){
+    //   router.push('login');
+    // }
+  },[]);
 
   const login = async (email, password) => {
     try {
-      const res = await axios.post(`${config.url}auth/login`, { email, password });
+      const res = await axios.post(`${config.url}auth/login`, { username: email, password });
       const token = res.data.token;
       setJwt(token);  // Guarda el token en el contexto
       // También puedes guardar el token en localStorage si quieres mantenerlo entre recargas de la página

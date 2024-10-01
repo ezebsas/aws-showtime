@@ -3,6 +3,8 @@ import { useRouter } from 'next/router';
 import { useAuth } from '../context/AuthContext'; // Importa el contexto de autenticación
 import styles from '../styles/login.module.css';
 import LoginHeader from '../components/LoginHeader';
+import axios from 'axios';
+import config from '../config';
 
 const Signup = () => {
     const { login } = useAuth(); // Usa el método login para autenticar después de registrarse
@@ -23,7 +25,13 @@ const Signup = () => {
         }
 
         try {
-            const res = await axios.post(`${config.url}auth/register`, { email, password });
+            const res = await axios.post(`${config.url}auth/register`, { 
+                username: email, 
+                password, 
+                firstname: 'Maxi',
+                lastname: 'Brun',
+                country: 'AR'
+            });
             // Si el registro es exitoso, podemos autenticar al usuario automáticamente
             await login(email, password); // Autentica después del registro
             router.push('/'); // Redirige a la página principal
