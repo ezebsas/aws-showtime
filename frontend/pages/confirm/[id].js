@@ -31,25 +31,13 @@ const Confirmed = () => {
     return <div>Charging...</div>;
   }
 
-  const handleConfirm = () => {
-    setOpen(true);
-  }
-
-  const buyTicket = () => {
-    try {
-        router.push('/confirm');
-    } catch {
-
-    }
-  }
-
   return (
     <>
       <Header />
       <div className="container">
         <div className="purchase-details">
-          <h2>Compra confirmada para {purchase.title}</h2>
-          <p style={{fontWeight: 600}}>Felicitaciones, has adquirido tus tickets para {purchase.title}</p>
+          <h2>Purchase confirmed for {purchase.title}</h2>
+          <p style={{fontWeight: 600}}>Congratulations, you have purchased your tickets for {purchase.title}</p>
 
           <hr></hr>
 
@@ -64,12 +52,12 @@ const Confirmed = () => {
             <p>Title</p>
             
             <p>{purchase.quantity}</p>
-            <p>Ticket para {purchase.title}</p>
+            <p>Ticket for {purchase.title}</p>
           </div>
 
           <div className='modal-buttons'>
-            <button onClick={()=>{router.push('/')}}>Volver al inicio</button>
-            <button onClick={()=>{router.push('/tickets')}}>Ver mis tickets</button>
+            <button onClick={()=>{router.push('/')}}>Back home</button>
+            <button onClick={()=>{router.push('/tickets')}}>Go to my tickets</button>
           </div>
 
         </div>

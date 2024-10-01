@@ -81,9 +81,9 @@ const BuyTicket = () => {
                     <div className='modal'>
                         {error ? (
                             <div className='modal-container'>
-                                <h3 color='red'>Ha ocurrido un error</h3>
+                                <h3 color='red'>Something went wrong</h3>
                                 <div className='modal-info'>
-                                    <p>Intente nuevamente mas tarde</p>
+                                    <p>Try again later</p>
                                 </div>
                             </div>
                         ):(
@@ -92,15 +92,18 @@ const BuyTicket = () => {
                                 <div className='modal-info'>
                                     <p>Once the purchase is made, you cannot make a return. Are you sure you want to make the purchase?</p>
                                     <div className='modal-buttons'>
-                                        <button onClick={()=>setOpen(false)}>Cancelar</button>
-                                        <button onClick={buyTicket}>Comprar</button>
+                                        <button onClick={()=>setOpen(false)}>Cancel</button>
+                                        <button onClick={buyTicket}>Buy</button>
                                     </div>
                                 </div>
                             </div>
                         )}
                     </div>
                 )}
-          <button onClick={handleConfirm}>Comprar</button>
+                {open && (
+                    <div className='modal-back-shadow' onClick={()=>{setOpen(false)}}></div>
+                )}
+          <button onClick={handleConfirm}>Buy</button>
         </div>
       </div>
     </>
