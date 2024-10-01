@@ -58,46 +58,45 @@ const BuyTicket = () => {
       <Header />
       <div className="container">
         <div className="spectacle-details">
-          <img src={spectacle.image} alt={spectacle.title} className="spectacle-image" />
-          <h2>{spectacle.title}</h2>
-          <p>Date: {spectacle.date}</p>
-          <p>Price: {spectacle.price} €</p>
-          <p>Duration: {spectacle.duration}hs</p>
-          <p>Ubication: {spectacle.ubication}</p>
-          <p>Hour: {spectacle.hour}</p>
-          <p>{spectacle.description}</p>
+            <img src={spectacle.image} alt={spectacle.title} className="spectacle-image" />
+            <h2>{spectacle.title}</h2>
+            <p>Date: {spectacle.date}</p>
+            <p>Price: {spectacle.price} €</p>
+            <p>Duration: {spectacle.duration}hs</p>
+            <p>Ubication: {spectacle.ubication}</p>
+            <p>Hour: {spectacle.hour}</p>
+            <p>{spectacle.description}</p>
 
-          <div className='form-container'>
-            <div className='form-item'>
-                <label for="quant">Select quantity:</label>
-                <select name="quant" id="quant" onChange={(ev) => {setQuantity(ev.target.value)}}>
-                    {Array.from(Array(spectacle.quantityMax)).map((o, index) => {
-                        return <option key={`${o}-${index}`} value={index + 1}>{index + 1}</option>
-                    })}
-                </select>
+            <div className='form-container'>
+                <div className='form-item'>
+                    <label for="quant">Select quantity:</label>
+                    <select name="quant" id="quant" onChange={(ev) => {setQuantity(ev.target.value)}}>
+                        {Array.from(Array(spectacle.quantityMax)).map((o, index) => {
+                            return <option key={`${o}-${index}`} value={index + 1}>{index + 1}</option>
+                        })}
+                    </select>
+                </div>
             </div>
-          </div>
+            {error && (
+                <div className='modal-container'>
+                    <h3 color='red'>Something went wrong</h3>
+                    <div className='modal-info'>
+                        <p>Try again later</p>
+                    </div>
+                </div>
+            )}
                 {open && (
                     <div className='modal'>
-                        {error ? (
-                            <div className='modal-container'>
-                                <h3 color='red'>Something went wrong</h3>
-                                <div className='modal-info'>
-                                    <p>Try again later</p>
+                        <div className='modal-container'>
+                            <h2>You are about to buy {quantity} tickets</h2>
+                            <div className='modal-info'>
+                                <p>Once the purchase is made, you cannot make a return. Are you sure you want to make the purchase?</p>
+                                <div className='modal-buttons'>
+                                    <button onClick={()=>setOpen(false)}>Cancel</button>
+                                    <button onClick={buyTicket}>Buy</button>
                                 </div>
                             </div>
-                        ):(
-                            <div className='modal-container'>
-                                <h2>You are about to buy {quantity} tickets</h2>
-                                <div className='modal-info'>
-                                    <p>Once the purchase is made, you cannot make a return. Are you sure you want to make the purchase?</p>
-                                    <div className='modal-buttons'>
-                                        <button onClick={()=>setOpen(false)}>Cancel</button>
-                                        <button onClick={buyTicket}>Buy</button>
-                                    </div>
-                                </div>
-                            </div>
-                        )}
+                        </div>  
                     </div>
                 )}
                 {open && (
