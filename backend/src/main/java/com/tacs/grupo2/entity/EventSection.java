@@ -24,11 +24,8 @@ public class EventSection {
     @ManyToOne
     @JoinColumn(name = "event_id")
     private Event event;
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "event_section_id")
-    @ToString.Exclude
-    private List<EventSeat> eventSeats;
     private BigDecimal price;
+    private Integer availableSeats;
 
     @Override
     public final boolean equals(Object o) {

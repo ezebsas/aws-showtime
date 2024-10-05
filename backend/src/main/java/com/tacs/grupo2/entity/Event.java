@@ -29,6 +29,7 @@ public class Event {
     @JoinColumn(name = "event_id")
     @ToString.Exclude
     List<EventSection> eventSections;
+    Integer maxSeatsPerUser;
 
     @Override
     public final boolean equals(Object o) {

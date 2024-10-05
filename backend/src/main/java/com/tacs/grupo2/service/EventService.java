@@ -30,9 +30,8 @@ public class EventService {
         return eventMapper.toDTO(eventRepository.save(event));
     }
 
-    public TicketDTO createTicket(TicketCreationDTO ticketCreationDTO) {
-        var ticket = ticketMapper.toTicket(ticketCreationDTO);
-        ticket.getEventSeats().forEach(eventSeat -> eventSeat.setTicket(ticket));
+    public TicketDTO createTicket(TicketCreationDTO ticketCreationDTO, Long id) {
+        var ticket = ticketMapper.toTicket(ticketCreationDTO, id);
         return ticketMapper.toDTO(ticketRepository.save(ticket));
     }
 

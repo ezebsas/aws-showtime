@@ -22,17 +22,15 @@ public class Ticket {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
-    @OneToMany(mappedBy = "ticket")
-    @ToString.Exclude
-    private List<EventSeat> eventSeats;
+    @ManyToOne
+    @JoinColumn(name = "event_section_id")
+    private EventSection eventSection;
+    private Integer quantity;
     @Column(nullable = false)
     private BigDecimal total;
 
     public void calculateTotalPrice() {
-         this.total = this.eventSeats.stream()
-                 .reduce(BigDecimal.ZERO,
-                         (subtotal, eventSeat) -> subtotal.add(eventSeat.getEventSection().getPrice()), BigDecimal::add
-                 );
+        this.total = this.eventSection.getPrice().multiply(BigDecimal.valueOf(this.quantity));
     }
 
     @PrePersist
