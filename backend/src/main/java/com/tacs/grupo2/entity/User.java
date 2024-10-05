@@ -1,5 +1,6 @@
 package com.tacs.grupo2.entity;
 
+import com.tacs.grupo2.dto.UserUpdateDTO;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
@@ -53,5 +54,19 @@ public class User implements UserDetails {
     @Override
     public final int hashCode() {
         return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
+    }
+
+    public void updateUser(UserUpdateDTO userUpdate) {
+
+        if (userUpdate.getFirstname() != null) {
+            this.setFirstname(userUpdate.getFirstname());
+        }
+        if(userUpdate.getLastname() != null) {
+            this.setLastname(userUpdate.getLastname());
+        }
+        if(userUpdate.getCountry() != null) {
+            this.setCountry(userUpdate.getCountry());
+        }
+
     }
 }
