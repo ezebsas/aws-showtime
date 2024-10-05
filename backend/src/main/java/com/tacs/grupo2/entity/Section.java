@@ -26,6 +26,8 @@ public class Section {
     @JoinColumn(name = "section_id")
     @ToString.Exclude
     private List<EventSection> eventSection;
+    @Column(nullable = false)
+    private Integer availableSeats;
 
     @Override
     public final boolean equals(Object o) {
