@@ -1,18 +1,7 @@
 package com.tacs.grupo2.dto;
 
-import com.tacs.grupo2.entity.Event;
-import com.tacs.grupo2.entity.EventSeat;
-import lombok.Builder;
-import lombok.Data;
-import lombok.Value;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
-import java.util.List;
-
-@Value
-@Builder(toBuilder = true)
-public class TicketCreationDTO {
-    String eventId;
-    String eventSectionId;
-    String userId;
-    List<String> seatIds;
+public record TicketCreationDTO(@NotNull Long eventSection, @NotNull @Positive Integer quantity) {
 }

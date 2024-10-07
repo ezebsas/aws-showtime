@@ -2,6 +2,7 @@ package com.tacs.grupo2.service;
 
 import com.tacs.grupo2.dto.VenueCreationDTO;
 import com.tacs.grupo2.dto.VenueDTO;
+import com.tacs.grupo2.exceptions.EntityNotFoundException;
 import com.tacs.grupo2.mapper.VenueMapper;
 import com.tacs.grupo2.repository.VenueRepository;
 import jakarta.transaction.Transactional;
@@ -17,9 +18,9 @@ public class VenueService {
     private final VenueMapper venueMapper;
 
     @Transactional
-    public void createVenue(VenueCreationDTO venueCreationDTO) {
+    public VenueDTO createVenue(VenueCreationDTO venueCreationDTO) {
         var venue = venueMapper.toVenue(venueCreationDTO);
-        venueRepository.save(venue);
+        return venueMapper.toDTO(venueRepository.save(venue));
     }
 
     public List<VenueDTO> getVenues() {
@@ -29,6 +30,6 @@ public class VenueService {
     public VenueDTO getVenue(Long id) {
         return venueRepository.findById(id)
                 .map(venueMapper::toDTO)
-                .orElseThrow();
+                .orElseThrow(() -> new EntityNotFoundException("Venue with id: " + id + " doesn't exist"));
     }
 }

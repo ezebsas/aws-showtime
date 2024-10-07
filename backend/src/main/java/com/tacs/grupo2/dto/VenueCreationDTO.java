@@ -1,16 +1,11 @@
 package com.tacs.grupo2.dto;
 
-import com.tacs.grupo2.entity.Event;
-import lombok.Builder;
-import lombok.Value;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.Valid;
 
 import java.util.List;
 
-@Value
-@Builder
-public class VenueCreationDTO {
-    String name;
-    String city;
-    String address;
-    List<SectionCreationDTO> sections;
+public record VenueCreationDTO(@NotBlank String name, String city, String address,
+                               @NotEmpty @Valid List<SectionCreationDTO> sections) {
 }

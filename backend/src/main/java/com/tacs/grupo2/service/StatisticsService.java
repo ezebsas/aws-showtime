@@ -1,14 +1,12 @@
 package com.tacs.grupo2.service;
 
+import com.tacs.grupo2.dto.EventDTO;
 import com.tacs.grupo2.dto.StatisticsDTO;
-import com.tacs.grupo2.entity.Event;
-import com.tacs.grupo2.entity.Ticket;
+import com.tacs.grupo2.dto.TicketDTO;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class StatisticsService {
@@ -20,14 +18,14 @@ public class StatisticsService {
     }
 
     public StatisticsDTO calculateStatistics() {
-        List<Event> events = eventService.getEvents();
-        List<Ticket> tickets = eventService.getTickets("UserIdExample"); // Utilización de un ID de usuario ficticio
+        List<EventDTO> events = eventService.getEvents();
+        List<TicketDTO> tickets = eventService.getTickets(1L); // Utilización de un ID de usuario ficticio
 
         return StatisticsDTO.builder()
                 .totalEvents(events.size())
                 .totalTicketsSold(tickets.size())
                 .totalRevenue(tickets.stream()
-                        .map(eventService::calculateTotalPrice)
+                        .map(TicketDTO::getTotal)
                         .mapToDouble(BigDecimal::doubleValue)
                         .sum())
                 .build();

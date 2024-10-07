@@ -15,12 +15,12 @@ const Home = () => {
     const fetchSpectacles = async () => {
       if(jwt){
         const data = 
-          await axios.get(`${config.url}events/list`,{
+          await axios.get(`${config.url}events`,{
             headers: {
               Authorization: `Bearer ${jwt}`,
             }
           })
-        setSpectacles(data);
+        setSpectacles(data.data._embedded.events);
       }
     };
 

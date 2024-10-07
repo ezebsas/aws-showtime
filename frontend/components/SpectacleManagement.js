@@ -14,7 +14,7 @@ const Home = () => {
 
   const fetchSpectacles = async () => {
     const data = 
-      await axios.get(`${config.url}events/list`)
+      await axios.get(`${config.url}events`)
     setSpectacles(data);
   };
 

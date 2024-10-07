@@ -5,6 +5,7 @@ import com.tacs.grupo2.dto.LoginRequestDTO;
 import com.tacs.grupo2.dto.RegisterRequestDTO;
 import com.tacs.grupo2.entity.User;
 import com.tacs.grupo2.entity.Role;
+import com.tacs.grupo2.exceptions.AuthException;
 import com.tacs.grupo2.jwt.JwtService;
 import com.tacs.grupo2.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,8 +24,12 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
 
     public AuthResponseDTO login(LoginRequestDTO request) {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
-        User user=userRepository.findByUsername(request.getUsername()).orElseThrow();
+        try{
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
+        }catch (Exception e){
+            throw new AuthException("Invalid username or password");
+        }
+        User user=userRepository.findByUsername(request.getUsername()).orElseThrow(() -> new AuthException("Username doesn't exist"));
         String token=jwtService.getToken(user);
         return AuthResponseDTO.builder()
                 .token(token)
@@ -33,6 +38,9 @@ public class AuthService {
     }
 
     public AuthResponseDTO register(RegisterRequestDTO request) {
+        if (userRepository.existsByUsername(request.getUsername())) {
+            throw new AuthException("Username is taken!");
+        }
         User user = new User();
                 user.setUsername(request.getUsername());
                 user.setPassword(passwordEncoder.encode( request.getPassword()));

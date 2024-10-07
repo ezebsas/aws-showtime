@@ -1,15 +1,11 @@
 package com.tacs.grupo2.dto;
 
-import lombok.Builder;
-import lombok.Value;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 
 import java.math.BigDecimal;
-import java.util.List;
 
-@Value
-@Builder(toBuilder = true)
-public class EventSectionCreationDTO {
-    Long sectionId;
-    List<EventSeatCreationDTO> eventSeats;
-    BigDecimal price;
+public record EventSectionCreationDTO(@NotNull Long sectionId, @PositiveOrZero BigDecimal price,
+                                      @Positive Integer availableSeats) {
 }

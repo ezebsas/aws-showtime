@@ -19,10 +19,6 @@ public class Section {
     private Long id;
     @Column(nullable = false)
     private String name;
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "section_id")
-    @ToString.Exclude
-    private List<Seat> seats;
     @ManyToOne
     @JoinColumn(name = "venue_id")
     private Venue venue;
@@ -30,6 +26,8 @@ public class Section {
     @JoinColumn(name = "section_id")
     @ToString.Exclude
     private List<EventSection> eventSection;
+    @Column(nullable = false)
+    private Integer availableSeats;
 
     @Override
     public final boolean equals(Object o) {

@@ -2,7 +2,6 @@
 import HeaderAdmin from '../../components/HeaderAdmin';
 import SpectacleListAdmin from '../../components/SpectacleManagement';
 
-
 const Spectacles = () => {
   return (
     <div>

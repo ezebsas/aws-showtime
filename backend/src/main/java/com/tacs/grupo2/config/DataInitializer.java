@@ -18,7 +18,7 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     @Transactional
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
         if (!userRepository.existsByUsername("admin")) {
             User defaultAdmin = new User();
             defaultAdmin.setUsername("admin");
