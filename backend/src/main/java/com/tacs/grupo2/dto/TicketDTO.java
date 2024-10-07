@@ -14,6 +14,7 @@ import java.util.List;
 public class TicketDTO {
     Long id;
     Long userId;
-    List<Long> eventSeatIds;
+    Long eventSectionId;
     BigDecimal total;
+    Integer quantity;
 }

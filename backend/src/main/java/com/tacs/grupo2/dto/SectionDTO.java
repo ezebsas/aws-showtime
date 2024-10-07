@@ -13,6 +13,5 @@ public class SectionDTO {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     String name;
-    List<SeatDTO> seats;
     List<EventSectionDTO> eventSection;
 }

@@ -12,6 +12,6 @@ public class EventSectionDTO {
     Long id;
     Long sectionId;
     Long eventId;
-    List<EventSeatDTO> eventSeats;
     BigDecimal price;
+    Integer availableSeats;
 }

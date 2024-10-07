@@ -6,7 +6,7 @@ import com.tacs.grupo2.entity.Section;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring", uses = { SeatMapper.class, EventSectionMapper.class })
+@Mapper(componentModel = "spring", uses = { EventSectionMapper.class })
 public interface SectionMapper {
 
     @Mapping(target = "venue", ignore = true)

@@ -2,6 +2,9 @@ package com.tacs.grupo2.controller;
 
 import com.tacs.grupo2.dto.TicketCreationDTO;
 import com.tacs.grupo2.dto.TicketDTO;
+import com.tacs.grupo2.entity.User;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.jwt.Jwt;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.CollectionModel;
@@ -23,8 +26,8 @@ public class TicketController {
     private final EventService eventService;
 
     @PostMapping
-    public ResponseEntity<EntityModel<TicketDTO>> createTicket(@RequestBody @Valid TicketCreationDTO ticketDetails) {
-        TicketDTO ticket = eventService.createTicket(ticketDetails);
+    public ResponseEntity<EntityModel<TicketDTO>> createTicket(@RequestBody @Valid TicketCreationDTO ticketDetails, Authentication authentication) {
+        TicketDTO ticket = eventService.createTicket(ticketDetails, ((User) authentication.getPrincipal()).getId());
         WebMvcLinkBuilder location = linkTo(methodOn(TicketController.class).getTicket(ticket.getId()));
         return ResponseEntity.created(location.toUri()).body(EntityModel.of(ticket, location.withSelfRel()));
     }
