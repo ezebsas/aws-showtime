@@ -2,35 +2,30 @@ import { useEffect, useState } from 'react';
 import Header from '../components/Header';
 import SpectacleList from '../components/SpectacleList';
 import '../styles/globals.css';
+import axios from 'axios';
+import config from '../config';
+import { useAuth } from '../context/AuthContext';
 
 const Home = () => {
   const [spectacles, setSpectacles] = useState([]);
 
+  const {jwt} = useAuth();
+
   useEffect(() => {
     const fetchSpectacles = async () => {
-      const data = [
-        {
-          id: '1',
-          title: 'Rock concert',
-          date: '2023-12-01',
-          price: 50,
-          image: '/images/rock.jpeg',
-          description: 'Event description.'
-        },
-        {
-          id: '2',
-          title: 'Theatre Play',
-          date: '2023-11-15',
-          price: 30,
-          image: '/images/teatro.jpeg',
-          description: 'Event description.'
-        },
-      ];
-      setSpectacles(data);
+      if(jwt){
+        const data = 
+          await axios.get(`${config.url}events`,{
+            headers: {
+              Authorization: `Bearer ${jwt}`,
+            }
+          })
+        setSpectacles(data.data._embedded.events);
+      }
     };
 
     fetchSpectacles();
-  }, []);
+  }, [jwt]);
 
   return (
     <div className="container">
