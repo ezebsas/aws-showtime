@@ -1,0 +1,19 @@
+/* styles/userInfo.module.css */
+.container {
+    background-color: #1a1a1a; /* Fond sombre */
+    padding: 20px;
+    border-radius: 8px;
+    color: #ffffff; /* Texte en blanc */
+    max-width: 400px;
+    margin: 20px auto; /* Centrer horizontalement */
+}
+
+.title {
+    margin-bottom: 15px;
+    font-size: 24px;
+    text-align: center; /* Centrer le titre */
+}
+
+.info {
+    font-size: 16px;
+}

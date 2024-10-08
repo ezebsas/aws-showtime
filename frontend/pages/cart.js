@@ -1,6 +1,7 @@
 import { useCart } from '../context/CartContext';
 import '../styles/globals.css';
 import Header from '../components/Header';
+import Link from 'next/link'; // Import Link from next/link
 
 const Cart = () => {
   const { cart } = useCart();
@@ -9,20 +10,32 @@ const Cart = () => {
     <>
       <Header />
       <div className="container">
-        <h2>My cart</h2>
+        <h2>My Cart</h2>
         {cart.length === 0 ? (
           <p>Your cart is empty</p>
         ) : (
-          <ul>
+          <div>
             {cart.map((item, index) => (
               <li key={index}>
-                <h3>{item.title}</h3>
+                <h2>{item.name}</h2>
                 <p>Date: {item.date}</p>
-                <p>Price: {item.price} €</p>
-                <img src={item.image} alt={item.title} style={{ maxWidth: '100px' }} />
+                <p>Status: {item.status}</p>
+
+                {/* Iterate over eventSections to display section details */}
+                <h3>Event Sections:</h3>
+                <ul>
+                  {item.eventSections.map((section) => (
+                    <li key={section.id}>
+                      <p>Section ID: {section.id}</p>
+                      <p>Price: {section.price} €</p>
+                      <p>Available Seats: {section.availableSeats}</p>
+                    </li>
+                  ))}
+                </ul>
               </li>
             ))}
-          </ul>
+            <Link href={`/spectacle/${cart[0].id}`} legacyBehavior>Keep buying</Link>
+          </div>
         )}
       </div>
     </>
