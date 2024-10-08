@@ -2,11 +2,11 @@ import Link from 'next/link';
 import { useCart } from '../context/CartContext';
 import styles from '../styles/spectacleList.module.css';
 
-const Spectacle = ({ id, name, date, status }) => {
+const Spectacle = ({ id, name, date, status, eventSections, venueId }) => {
   const { addToCart } = useCart();
 
   const handleAddToCart = () => {
-    addToCart({ id, name, date, status }); 
+    addToCart({ id, name, date, status, eventSections, venueId }); 
   };
 
   return (
