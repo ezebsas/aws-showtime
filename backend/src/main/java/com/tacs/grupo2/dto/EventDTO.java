@@ -18,4 +18,5 @@ public class EventDTO {
     EventStatus status;
     Long venueId;
     List<EventSectionDTO> eventSections;
+    Integer maxSeatsPerUser;
 }

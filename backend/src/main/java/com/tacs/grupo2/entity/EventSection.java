@@ -52,4 +52,8 @@ public class EventSection {
 
         return errorList;
     }
+
+    public void decreaseAvailableSeats(Integer quantity) {
+        availableSeats -= quantity;
+    }
 }
