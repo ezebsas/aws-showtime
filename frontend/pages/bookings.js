@@ -1,32 +1,58 @@
+import { useEffect, useState } from 'react';
 import { useCart } from '../context/CartContext';
 import '../styles/globals.css';
 import Header from '../components/Header';
+import axios from 'axios';
+import config from '../config'; // Adjust the import path as necessary
+import { useAuth } from '../context/AuthContext';
 
-const Cart = () => {
-  const { cart } = useCart();
+const Bookings = () => {
+  const { jwt } = useAuth(); // Get JWT from authentication context
+  const [tickets, setTickets] = useState([]); // State to hold tickets
+  const [error, setError] = useState(false); // State to handle errors
+
+  useEffect(() => {
+    const fetchTickets = async () => {
+      if (jwt) {
+        try {
+          const response = await axios.get(`${config.url}tickets`, {
+            headers: {
+              Authorization: `Bearer ${jwt}`, // Include the JWT in the headers
+            },
+          });
+          setTickets(response.data._embedded.tickets); 
+        } catch (error) {
+          console.error('Error fetching tickets:', error);
+          setError(true);
+        }
+      }
+    };
+
+    fetchTickets();
+  }, [jwt]); // Dependency array includes jwt
 
   return (
     <>
       <Header />
       <div className="container">
         <h2>My Bookings</h2>
-        {cart.length === 0 ? (
+        {tickets.length === 0 ? (
           <p>You have no bookings yet.</p>
         ) : (
           <ul>
-            {cart.map((item, index) => (
+            {tickets.map((item, index) => (
               <li key={index}>
-                <h3>{item.title}</h3>
-                <p>Date: {item.date}</p>
-                <p>Price: {item.price} €</p>
-                <img src={item.image} alt={item.title} style={{ maxWidth: '100px' }} />
+                <p>Ticket id: {item.id}</p>
+                <p>Price: {item.total} €</p>
+                <p>Quenatity: {item.quantity} €</p>
               </li>
             ))}
           </ul>
         )}
+        {error && <p>There was an error fetching your tickets. Please try again later.</p>}
       </div>
     </>
   );
 };
 
-export default Cart;
+export default Bookings;

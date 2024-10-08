@@ -20,6 +20,9 @@ const Header = () => {
         <Link href="/cart" legacyBehavior>
           <button className={styles.button}>Cart</button>
         </Link>
+        <Link href="/profile" legacyBehavior>
+          <button className={styles.button}>My account</button>
+        </Link>
         <Link href="/login" legacyBehavior>
           <button className={styles.button} onClick={logout}>Logout</button>
         </Link>

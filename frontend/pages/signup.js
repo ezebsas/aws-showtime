@@ -7,8 +7,10 @@ import axios from 'axios';
 import config from '../config';
 
 const Signup = () => {
-    const { login } = useAuth(); // Usa el método login para autenticar después de registrarse
-    const [email, setEmail] = useState('');
+    const [username, setUsername] = useState('');
+    const [firstname, setFirstname] = useState('');
+    const [lastname, setLastname] = useState('');
+    const [country, setCountry] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setError] = useState('');
@@ -25,16 +27,14 @@ const Signup = () => {
         }
 
         try {
-            const res = await axios.post(`${config.url}auth/register`, { 
-                username: email, 
-                password, 
-                firstname: 'Maxi',
-                lastname: 'Brun',
-                country: 'AR'
+            await axios.post(`${config.url}auth/register`, { 
+                username, 
+                firstname, 
+                lastname, 
+                country, 
+                password 
             });
-            // Si el registro es exitoso, podemos autenticar al usuario automáticamente
-            await login(email, password); // Autentica después del registro
-            router.push('/'); // Redirige a la página principal
+            router.push('/login');
         } catch (err) {
             setError('Registration failed. Please try again.'); // Manejo de errores generales
             console.error(err);
@@ -48,12 +48,42 @@ const Signup = () => {
             {error && <p className={styles.error}>{error}</p>} {/* Muestra errores */}
             <form onSubmit={handleSubmit} className={styles.form}>
                 <div className={styles.formGroup}>
-                    <label htmlFor="email">Email:</label>
+                    <label htmlFor="username">Email:</label>
                     <input
-                        type="email"
-                        id="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
+                        type="text"
+                        id="username"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                        className={styles.input}
+                    />
+                </div>
+                <div className={styles.formGroup}>
+                    <label htmlFor="firstname">First Name:</label>
+                    <input
+                        type="text"
+                        id="firstname"
+                        value={firstname}
+                        onChange={(e) => setFirstname(e.target.value)}
+                        className={styles.input}
+                    />
+                </div>
+                <div className={styles.formGroup}>
+                    <label htmlFor="lastname">Last Name:</label>
+                    <input
+                        type="text"
+                        id="lastname"
+                        value={lastname}
+                        onChange={(e) => setLastname(e.target.value)}
+                        className={styles.input}
+                    />
+                </div>
+                <div className={styles.formGroup}>
+                    <label htmlFor="country">Country:</label>
+                    <input
+                        type="text"
+                        id="country"
+                        value={country}
+                        onChange={(e) => setCountry(e.target.value)}
                         className={styles.input}
                     />
                 </div>

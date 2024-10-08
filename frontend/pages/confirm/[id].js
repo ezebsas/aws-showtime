@@ -57,7 +57,7 @@ const Confirmed = () => {
 
           <div className='modal-buttons'>
             <button onClick={()=>{router.push('/')}}>Back home</button>
-            <button onClick={()=>{router.push('/tickets')}}>Go to my tickets</button>
+            <button onClick={()=>{router.push('/bookings')}}>Go to my tickets</button>
           </div>
 
         </div>

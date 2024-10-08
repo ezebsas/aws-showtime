@@ -33,9 +33,9 @@ public class TicketController {
     }
 
     @GetMapping
-    public ResponseEntity<CollectionModel<TicketDTO>> getTickets(@RequestParam Long userId) {
-        List<TicketDTO> tickets = eventService.getTickets(userId);
-        return ResponseEntity.ok(CollectionModel.of(tickets, linkTo(methodOn(TicketController.class).getTickets(userId)).withSelfRel()));
+    public ResponseEntity<CollectionModel<TicketDTO>> getTickets(Authentication authentication) {
+        List<TicketDTO> tickets = eventService.getTickets(((User) authentication.getPrincipal()).getId());
+        return ResponseEntity.ok(CollectionModel.of(tickets));
     }
 
     @GetMapping("/{ticketId}")
