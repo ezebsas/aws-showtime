@@ -5,11 +5,13 @@ import '../styles/globals.css';
 import axios from 'axios';
 import config from '../config';
 import { useAuth } from '../context/AuthContext';
+import { useRouter } from 'next/router';
 
 const Home = () => {
   const [spectacles, setSpectacles] = useState([]);
 
   const {jwt} = useAuth();
+  const router = useRouter();
 
   useEffect(() => {
     const fetchSpectacles = async () => {
@@ -25,7 +27,7 @@ const Home = () => {
     };
 
     fetchSpectacles();
-  }, [jwt]);
+  }, [jwt, router]);
 
   return (
     <div className="container">

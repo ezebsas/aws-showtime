@@ -5,7 +5,7 @@ const SpectacleList = ({ spectacles }) => {
   return (
     <div className={styles.spectacleList}>
       <h2>List of events</h2>
-      {spectacles ? (
+      {!spectacles ? (
         <p>No events available</p>
       ):(
         spectacles.map((spectacle, index) => (
