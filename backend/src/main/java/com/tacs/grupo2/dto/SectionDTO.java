@@ -14,4 +14,5 @@ public class SectionDTO {
     Long id;
     String name;
     List<EventSectionDTO> eventSection;
+    Integer availableSeats;
 }

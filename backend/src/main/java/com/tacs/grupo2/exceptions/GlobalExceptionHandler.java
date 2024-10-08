@@ -47,6 +47,12 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
+    @ExceptionHandler(EventCreationException.class)
+    public ResponseEntity<ErrorResponseDTO<String>> handleEventCreationException(EventCreationException e) {
+        ErrorResponseDTO<String> error = new ErrorResponseDTO<>(HttpStatus.BAD_REQUEST.value(), e.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    }
+
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ErrorResponseDTO<String>> handleAccessDeniedException(AccessDeniedException e) {
         ErrorResponseDTO<String> error = new ErrorResponseDTO<>(HttpStatus.FORBIDDEN.value(), "Access Denied");
