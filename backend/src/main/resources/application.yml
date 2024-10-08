@@ -1,8 +1,11 @@
 spring:
+  docker:
+    compose:
+      enabled: ${DOCKER_COMPOSE_ENABLED:true}
   application:
     name: tacs-grupo2-api
   datasource:
-    url: jdbc:postgresql://db/tacs
+    url: jdbc:postgresql://${POSTGRES_HOST:db}/tacs
     username: postgres
     password: ${POSTGRES_PASSWORD}
     driver-class-name: org.postgresql.Driver
@@ -31,4 +34,8 @@ logging:
       tacs:
         grupo2: DEBUG
 
+
+    org:
+      springframework:
+        security: DEBUG
 

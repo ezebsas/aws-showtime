@@ -32,6 +32,7 @@ public class JwtService {
                 .claim("userId", user.getId())
                 .claim(("firstName"), user.getFirstname())
                 .claim("lastName", user.getLastname())
+                .claim("role", user.getRole())
                 .subject(user.getUsername())
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis()+1000*60*24))
@@ -39,7 +40,7 @@ public class JwtService {
                 .compact();
     }
 
-    private SecretKey getKey() {
+    public SecretKey getKey() {
         byte[] keyBytes= Decoders.BASE64.decode(SECRET_KEY);
         return Keys.hmacShaKeyFor(keyBytes);
     }
@@ -79,4 +80,12 @@ public class JwtService {
         return getExpiration(token).before(new Date());
     }
 
+    public String getRoleFromToken(String token) {
+        Claims claims = Jwts.parser()
+                .verifyWith(this.getKey())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+        return claims.get("role", String.class);
+    }
 }

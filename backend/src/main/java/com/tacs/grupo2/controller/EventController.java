@@ -13,6 +13,8 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -47,6 +49,11 @@ public class EventController {
     @PutMapping("/{eventId}/close")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> closeEvent(@PathVariable Long eventId) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null) {
+            System.out.println("Current user authorities: " + auth.getAuthorities());
+        }
+
         eventService.closeEvent(eventId);
         return ResponseEntity.ok().build();
     }
