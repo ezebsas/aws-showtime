@@ -5,6 +5,7 @@ import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -45,6 +46,12 @@ public class Event {
     @Override
     public final int hashCode() {
         return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
+    }
+
+    public List<String> validate() {
+        var errorList = new ArrayList<String>();
+        eventSections.forEach(eventSection -> errorList.addAll(eventSection.validate()));
+        return errorList;
     }
 }
 

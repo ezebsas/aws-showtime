@@ -6,6 +6,7 @@ import com.tacs.grupo2.dto.TicketCreationDTO;
 import com.tacs.grupo2.dto.TicketDTO;
 import com.tacs.grupo2.entity.*;
 import com.tacs.grupo2.exceptions.EntityNotFoundException;
+import com.tacs.grupo2.exceptions.EventCreationException;
 import com.tacs.grupo2.mapper.EventMapper;
 import com.tacs.grupo2.mapper.TicketMapper;
 import com.tacs.grupo2.repository.EventRepository;
@@ -27,6 +28,11 @@ public class EventService {
 
     public EventDTO createEvent(EventCreationDTO eventCreationDTO) {
         var event = eventMapper.toEvent(eventCreationDTO);
+        List<String> errorList = event.validate();
+        if (!errorList.isEmpty()) {
+            throw new EventCreationException(errorList);
+        }
+
         return eventMapper.toDTO(eventRepository.save(event));
     }
 

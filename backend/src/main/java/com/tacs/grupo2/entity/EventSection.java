@@ -5,6 +5,7 @@ import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -41,5 +42,14 @@ public class EventSection {
     @Override
     public final int hashCode() {
         return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
+    }
+
+    public List<String> validate() {
+        var errorList = new ArrayList<String>();
+        if (availableSeats > section.getAvailableSeats()) {
+            errorList.add("Available seats must be less than or equal to the section's available seats");
+        }
+
+        return errorList;
     }
 }
