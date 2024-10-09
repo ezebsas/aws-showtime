@@ -10,7 +10,9 @@ import com.tacs.grupo2.exceptions.EventCreationException;
 import com.tacs.grupo2.mapper.EventMapper;
 import com.tacs.grupo2.mapper.TicketMapper;
 import com.tacs.grupo2.repository.EventRepository;
+import com.tacs.grupo2.repository.EventSectionRepository;
 import com.tacs.grupo2.repository.TicketRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -25,6 +27,7 @@ public class EventService {
     private final TicketRepository ticketRepository;
     private final EventMapper eventMapper;
     private final TicketMapper ticketMapper;
+    private final EventSectionRepository eventSectionRepository;
 
     public EventDTO createEvent(EventCreationDTO eventCreationDTO) {
         var event = eventMapper.toEvent(eventCreationDTO);
@@ -36,9 +39,14 @@ public class EventService {
         return eventMapper.toDTO(eventRepository.save(event));
     }
 
+    @Transactional
     public TicketDTO createTicket(TicketCreationDTO ticketCreationDTO, Long id) {
         var ticket = ticketMapper.toTicket(ticketCreationDTO, id);
-        return ticketMapper.toDTO(ticketRepository.save(ticket));
+        var savedTicket = ticketRepository.save(ticket);
+        ticket.getEventSection().decreaseAvailableSeats(ticket.getQuantity());
+        eventSectionRepository.save(ticket.getEventSection());
+
+        return ticketMapper.toDTO(savedTicket);
     }
 
     public List<TicketDTO> getTickets(Long userId) {
