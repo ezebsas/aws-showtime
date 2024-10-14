@@ -15,9 +15,13 @@ const Spectacle = ({ id, name, date, status, eventSections, venueId }) => {
       <p className={styles.spectacleDate}>Date: {date}</p>
       <p className={styles.spectacleStatus}>Status: {status}</p>
 
-      <Link href={`/spectacle/${id}`} legacyBehavior>
-        <button className={styles.button} onClick={handleAddToCart}>See more</button>
-      </Link>
+      {status !== 'CLOSED' ? (
+        <Link href={`/spectacle/${id}`} legacyBehavior>
+          <button className={styles.button} onClick={handleAddToCart}>See more</button>
+        </Link>
+      ): (
+          <p>Closed events can't be booked.</p>
+      )}
     </div>
   );
 };
