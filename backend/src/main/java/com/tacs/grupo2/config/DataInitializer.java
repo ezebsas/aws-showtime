@@ -19,9 +19,9 @@ public class DataInitializer implements CommandLineRunner {
     @Override
     @Transactional
     public void run(String... args) {
-        if (!userRepository.existsByUsername("admin")) {
+        if (!userRepository.existsByUsername("admin@gmail.com")) {
             User defaultAdmin = new User();
-            defaultAdmin.setUsername("admin");
+            defaultAdmin.setUsername("admin@gmail.com");
             defaultAdmin.setPassword(passwordEncoder.encode("admin"));
             defaultAdmin.setRole(Role.ADMIN);
             defaultAdmin.setFirstname("Admin");
