@@ -47,6 +47,11 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<String> handleIllegalStateException(IllegalStateException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(EventCreationException.class)
     public ResponseEntity<ErrorResponseDTO<String>> handleEventCreationException(EventCreationException e) {
         ErrorResponseDTO<String> error = new ErrorResponseDTO<>(HttpStatus.BAD_REQUEST.value(), e.getMessage());

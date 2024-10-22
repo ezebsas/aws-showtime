@@ -42,6 +42,19 @@ public class EventService {
     @Transactional
     public TicketDTO createTicket(TicketCreationDTO ticketCreationDTO, Long id) {
         var ticket = ticketMapper.toTicket(ticketCreationDTO, id);
+        var event = ticket.getEventSection().getEvent();
+
+        if (event.getStatus() == EventStatus.CLOSED) {
+            throw new IllegalStateException("Cannot create ticket for a closed event");
+        }
+
+        if (ticket.getQuantity() > ticket.getEventSection().getAvailableSeats()) {
+            throw new IllegalArgumentException("Not enough available seats for the requested quantity");
+        }
+        
+        if (ticket.getQuantity() > event.getMaxSeatsPerUser()) {
+            throw new IllegalArgumentException("Requested quantity exceeds the maximum seats per user for this event");
+        }
         var savedTicket = ticketRepository.save(ticket);
         ticket.getEventSection().decreaseAvailableSeats(ticket.getQuantity());
         eventSectionRepository.save(ticket.getEventSection());
