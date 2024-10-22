@@ -1,8 +1,6 @@
-import { useCart } from '../context/CartContext';
 import styles from '../styles/spectacleList.module.css';
 
 const SpectacleAdmin = ({ id, title, date, price, image, description, handleDelete }) => {
-  const { addToCart } = useCart();
 
   return (
     <div className={styles.spectacle}>

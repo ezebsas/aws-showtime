@@ -20,7 +20,7 @@ const Spectacle = ({ id, name, date, status, eventSections, venueId }) => {
           <button className={styles.button} onClick={handleAddToCart}>See more</button>
         </Link>
       ): (
-          <p>Closed events can't be booked.</p>
+          <p>Closed events can&apos;t be booked.</p>
       )}
     </div>
   );

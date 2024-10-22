@@ -59,7 +59,7 @@ const BuyTicket = () => {
     };
 
     fetchData();
-  }, [jwt, id]); // Dependency array includes jwt and id
+  }, [jwt, id, router]); // Dependency array includes jwt and id
 
   // If loading, show loading state
   if (loading) {
@@ -87,7 +87,7 @@ const BuyTicket = () => {
     }
 
     try {
-      const response = await axios.post(
+      await axios.post(
         `${config.url}tickets`,
         {
           eventSection: selectedSectionId, // Use the selected section ID
@@ -114,7 +114,7 @@ const BuyTicket = () => {
         <div className="spectacle-details">
           {/* Check if the event is closed */}
           {spectacle.status === 'CLOSED' ? (
-            <p>Event closed, you can't buy tickets anymore.</p>
+            <p>Event closed, you can&apos;t buy tickets anymore.</p>
           ) : (
             <>
               <h2>{spectacle.name}</h2>

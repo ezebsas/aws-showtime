@@ -3,7 +3,7 @@ services:
     build:
       context: ./backend
     ports:
-      - 8080:8080
+      - 8000:8080
       - 5005:5005
     environment:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
@@ -33,6 +33,20 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+  frontend:
+    container_name: back-for-frontend
+    image: front-tptacs-img
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+#      args:
+#        - NEXTAUTH_SECRET=adsfasdfasdfasdf
+#        - NEXTAUTH_URL=http://${FRONT_URL:-host.docker.internal}:3000/
+#        - NEXT_PUBLIC_BACKEND_INTERNAL_URL=${BACKEND_URL:-host.docker.internal}
+    ports:
+      - "8080:3000"
+    depends_on:
+      - server
 volumes:
   db-data:
 secrets:

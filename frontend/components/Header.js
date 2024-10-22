@@ -1,10 +1,8 @@
-import { useRouter } from 'next/router';
 import Link from 'next/link';
 import styles from '../styles/header.module.css';
 import { useAuth } from '../context/AuthContext';
 
 const Header = () => {
-  const router = useRouter();
   const {logout} = useAuth();
 
   return (

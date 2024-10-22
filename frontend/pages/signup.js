@@ -1,8 +1,6 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-import { useAuth } from '../context/AuthContext'; // Importa el contexto de autenticación
 import styles from '../styles/login.module.css';
-import LoginHeader from '../components/LoginHeader';
 import axios from 'axios';
 import config from '../config';
 
@@ -43,7 +41,6 @@ const Signup = () => {
 
     return (
         <div className={styles.container}>
-            <LoginHeader />
             <h2>Create an account</h2>
             {error && <p className={styles.error}>{error}</p>} {/* Muestra errores */}
             <form onSubmit={handleSubmit} className={styles.form}>

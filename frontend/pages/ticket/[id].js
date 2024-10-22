@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 import Header from '../../components/Header';
-import TicketDetail from '../../components/TicketDetail';
 import config from '../../config';
 
 const Ticket = () => {
@@ -30,7 +29,6 @@ const Ticket = () => {
     <div>
       <Header />
       <main>
-        <TicketDetail ticket={ticket} />
       </main>
     </div>
   );

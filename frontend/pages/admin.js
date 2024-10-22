@@ -1,5 +1,4 @@
-import { useState, useEffect } from 'react';
-import axios from 'axios';
+import { useState } from 'react';
 import HeaderAdmin from '../components/HeaderAdmin';
 import Statistics from '../components/Statistics';
 import SpectacleListAdmin from '../components/SpectacleManagement';
