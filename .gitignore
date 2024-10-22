@@ -32,3 +32,5 @@ backend/.env
 secrets/
 
 .DS_Store
+
+*.pem
