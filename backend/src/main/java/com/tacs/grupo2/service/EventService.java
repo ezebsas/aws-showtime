@@ -12,10 +12,17 @@ import com.tacs.grupo2.mapper.TicketMapper;
 import com.tacs.grupo2.repository.EventRepository;
 import com.tacs.grupo2.repository.EventSectionRepository;
 import com.tacs.grupo2.repository.TicketRepository;
-import jakarta.transaction.Transactional;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.LockModeType;
+import jakarta.persistence.OptimisticLockException;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.annotation.Propagation;
+import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 
 import java.util.List;
 
@@ -39,10 +46,77 @@ public class EventService {
         return eventMapper.toDTO(eventRepository.save(event));
     }
 
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    /*
+   @Transactional
+   public TicketDTO createTicket(TicketCreationDTO ticketCreationDTO, Long id) {
+       int maxRetries = 10;
+       int attempt = 0;
+
+       log.info("Creating ticket for event section with id: " + id);
+       while (attempt < maxRetries) {
+           try {
+               log.info("Attempt: " + attempt);
+               var ticket = ticketMapper.toTicket(ticketCreationDTO, id);
+               var eventSection = entityManager.find(EventSection.class, ticket.getEventSection().getId(), LockModeType.OPTIMISTIC);
+               var event = eventSection.getEvent();
+
+               if (event.getStatus() == EventStatus.CLOSED) {
+                   throw new IllegalStateException("Cannot create ticket for a closed event");
+               }
+
+               if (ticket.getQuantity() > ticket.getEventSection().getAvailableSeats()) {
+                   throw new IllegalArgumentException("Not enough available seats for the requested quantity");
+               }
+
+               if (ticket.getQuantity() > event.getMaxSeatsPerUser()) {
+                   throw new IllegalArgumentException("Requested quantity exceeds the maximum seats per user for this event");
+               }
+
+               var savedTicket = ticketRepository.save(ticket);
+               ticket.getEventSection().decreaseAvailableSeats(ticket.getQuantity());
+               eventSectionRepository.save(ticket.getEventSection());
+
+               return ticketMapper.toDTO(savedTicket);
+           } catch (ObjectOptimisticLockingFailureException e) {
+               //log the exception and retry
+                log.warn("Optimistic lock exception while creating ticket, retrying", e);
+               attempt++;
+               if (attempt >= maxRetries) {
+                   throw new IllegalStateException("Failed to create ticket after " + maxRetries + " attempts", e);
+               }
+           }
+       }
+       throw new IllegalStateException("Could not create ticket, try again later");
+   }
+   */
     @Transactional
     public TicketDTO createTicket(TicketCreationDTO ticketCreationDTO, Long id) {
+        int maxRetries = 10;
+        int attempt = 0;
+
+        while (attempt < maxRetries) {
+            try {
+                return createTicketWithNewTransaction(ticketCreationDTO, id);
+            } catch (ObjectOptimisticLockingFailureException e) {
+                log.warn("Optimistic lock exception while creating ticket, retrying", e);
+                attempt++;
+                if (attempt >= maxRetries) {
+                    throw new IllegalStateException("Failed to create ticket after " + maxRetries + " attempts", e);
+                }
+            }
+        }
+        throw new IllegalStateException("Could not create ticket, try again later");
+    }
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = ObjectOptimisticLockingFailureException.class)
+    public TicketDTO createTicketWithNewTransaction(TicketCreationDTO ticketCreationDTO, Long id) {
+        log.info("Entro a createTicketWithNewTransaction");
         var ticket = ticketMapper.toTicket(ticketCreationDTO, id);
-        var event = ticket.getEventSection().getEvent();
+        var eventSection = entityManager.find(EventSection.class, ticket.getEventSection().getId(), LockModeType.OPTIMISTIC);
+        var event = eventSection.getEvent();
 
         if (event.getStatus() == EventStatus.CLOSED) {
             throw new IllegalStateException("Cannot create ticket for a closed event");
@@ -51,16 +125,18 @@ public class EventService {
         if (ticket.getQuantity() > ticket.getEventSection().getAvailableSeats()) {
             throw new IllegalArgumentException("Not enough available seats for the requested quantity");
         }
-        
+
         if (ticket.getQuantity() > event.getMaxSeatsPerUser()) {
             throw new IllegalArgumentException("Requested quantity exceeds the maximum seats per user for this event");
         }
+
         var savedTicket = ticketRepository.save(ticket);
         ticket.getEventSection().decreaseAvailableSeats(ticket.getQuantity());
         eventSectionRepository.save(ticket.getEventSection());
 
         return ticketMapper.toDTO(savedTicket);
     }
+
 
     public List<TicketDTO> getTickets(Long userId) {
         return ticketRepository.findByUserId(userId).stream().map(ticketMapper::toDTO).toList();

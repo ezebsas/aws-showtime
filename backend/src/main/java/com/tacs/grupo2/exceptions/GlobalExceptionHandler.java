@@ -1,9 +1,11 @@
 package com.tacs.grupo2.exceptions;
 
 import com.tacs.grupo2.dto.ErrorResponseDTO;
+import lombok.extern.slf4j.Slf4j;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -66,6 +69,17 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ErrorResponseDTO<String>> handleRuntimeException(RuntimeException e) {
+        if (e instanceof ObjectOptimisticLockingFailureException) {
+            log.warn("Exception name: ");
+            throw e; // Let the service method handle this exception
+        }
+        if (e == null) {
+            log.error("Exception object is null.");
+        }
+        log.error("-------------------");
+        log.error("Unhandled exception caught by GlobalExceptionHandler: ", e);
+        log.error("Exception message: {}", e.getMessage());  // Just to log the message separately if needed
+        log.error("-------------------");
         ErrorResponseDTO<String> error = new ErrorResponseDTO<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
     }

@@ -28,6 +28,9 @@ public class EventSection {
     private BigDecimal price;
     private Integer availableSeats;
 
+    @Version
+    private Integer version=0;
+
     @Override
     public final boolean equals(Object o) {
         if (this == o) return true;
