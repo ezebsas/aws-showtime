@@ -69,17 +69,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ErrorResponseDTO<String>> handleRuntimeException(RuntimeException e) {
-        if (e instanceof ObjectOptimisticLockingFailureException) {
-            log.warn("Exception name: ");
-            throw e; // Let the service method handle this exception
-        }
-        if (e == null) {
-            log.error("Exception object is null.");
-        }
-        log.error("-------------------");
         log.error("Unhandled exception caught by GlobalExceptionHandler: ", e);
-        log.error("Exception message: {}", e.getMessage());  // Just to log the message separately if needed
-        log.error("-------------------");
         ErrorResponseDTO<String> error = new ErrorResponseDTO<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
     }
