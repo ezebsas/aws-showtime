@@ -38,6 +38,7 @@ public class EventService {
     private final TicketMapper ticketMapper;
     private final EventSectionRepository eventSectionRepository;
     private final PlatformTransactionManager transactionManager;
+    private final StatisticsService statsService;
 
     public EventDTO createEvent(EventCreationDTO eventCreationDTO) {
         var event = eventMapper.toEvent(eventCreationDTO);
@@ -45,8 +46,9 @@ public class EventService {
         if (!errorList.isEmpty()) {
             throw new EventCreationException(errorList);
         }
-
-        return eventMapper.toDTO(eventRepository.save(event));
+        EventDTO dto = eventMapper.toDTO(eventRepository.save(event));
+        statsService.incrementCounter("TOTAL_EVENTS");
+        return dto;
     }
 
     @PersistenceContext
@@ -82,6 +84,8 @@ public class EventService {
                     ticket.getEventSection().decreaseAvailableSeats(ticket.getQuantity());
                     eventSectionRepository.save(ticket.getEventSection());
 
+                    statsService.incrementCounter("TOTAL_TICKETS_SOLD");
+                    statsService.addDoubleCounter("TOTAL_REVENUE", ticket.getTotal().doubleValue());
                     return ticketMapper.toDTO(savedTicket);
                 });
             } catch (ObjectOptimisticLockingFailureException e) {

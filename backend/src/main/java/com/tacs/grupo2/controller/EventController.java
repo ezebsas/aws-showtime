@@ -27,7 +27,6 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RequiredArgsConstructor
 public class EventController {
     private final EventService eventService;
-    private final StatisticsService statisticsService;
 
     @PostMapping
     public ResponseEntity<EntityModel<EventDTO>> createEvent(@RequestBody @Valid EventCreationDTO eventCreationDTO) {
@@ -58,9 +57,4 @@ public class EventController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/statistics")
-    public ResponseEntity<StatisticsDTO> getStatistics() {
-        StatisticsDTO statisticsDTO = statisticsService.calculateStatistics();
-        return ResponseEntity.ok(statisticsDTO);
-    }
 }

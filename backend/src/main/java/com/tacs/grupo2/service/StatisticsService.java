@@ -14,20 +14,26 @@ import java.util.List;
 @Service
 public class StatisticsService {
 
-    private final EventService eventService;
     private final StatsRedisRepository statsRedisRepository;
 
-    public StatisticsDTO calculateStatistics() {
-        List<EventDTO> events = eventService.getEvents();
-        List<TicketDTO> tickets = eventService.getTickets(1L); // Utilización de un ID de usuario ficticio
+    public Integer getUniqueUsersCount(){
+        return Math.toIntExact(statsRedisRepository.getLongCounter("UNIQUE_USERS"));
+    }
 
+    public void incrementCounter(String counter) {
+        statsRedisRepository.incrementCounter(counter);
+    }
+
+    public void addDoubleCounter(String counter, double value) {
+        statsRedisRepository.addDoubleCounter(counter, value);
+    }
+
+    public StatisticsDTO calculateStatistics() {
         return StatisticsDTO.builder()
-                .totalEvents(events.size())
-                .totalTicketsSold(tickets.size())
-                .totalRevenue(tickets.stream()
-                        .map(TicketDTO::getTotal)
-                        .mapToDouble(BigDecimal::doubleValue)
-                        .sum())
+                .uniqueUsers(statsRedisRepository.getLongCounter("UNIQUE_USERS"))
+                .totalEvents(statsRedisRepository.getLongCounter("TOTAL_EVENTS"))
+                .totalTicketsSold(statsRedisRepository.getLongCounter("TOTAL_TICKETS_SOLD"))
+                .totalRevenue(statsRedisRepository.getDoubleCounter("TOTAL_REVENUE"))
                 .build();
     }
 }

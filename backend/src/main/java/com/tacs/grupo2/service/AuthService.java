@@ -22,6 +22,7 @@ public class AuthService {
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
+    private final StatisticsService statsService;
 
     public AuthResponseDTO login(LoginRequestDTO request) {
         try{
@@ -50,6 +51,7 @@ public class AuthService {
                 user.setRole(Role.USER);
 
         userRepository.save(user);
+        statsService.incrementCounter("UNIQUE_USERS");
 
         return AuthResponseDTO.builder()
                 .token(jwtService.getToken(user))

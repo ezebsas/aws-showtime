@@ -8,10 +8,9 @@ import java.util.Map;
 @Value
 @Builder(toBuilder = true)
 public class StatisticsDTO {
+    long uniqueUsers;
     long totalEvents;
     long totalTicketsSold;
     double totalRevenue;
-    Map<String, Long> ticketsSoldPerEvent;
-    Map<String, Long> revenuePerEvent;
 }
 
