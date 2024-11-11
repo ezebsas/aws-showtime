@@ -5,6 +5,7 @@ import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -28,6 +29,8 @@ public class Ticket {
     private Integer quantity;
     @Column(nullable = false)
     private BigDecimal total;
+
+    private LocalDateTime createdAt;
 
     public void calculateTotalPrice() {
         this.total = this.eventSection.getPrice().multiply(BigDecimal.valueOf(this.quantity));

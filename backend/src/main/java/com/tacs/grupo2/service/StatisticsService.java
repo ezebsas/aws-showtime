@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -26,6 +28,10 @@ public class StatisticsService {
 
     public void addDoubleCounter(String counter, double value) {
         statsRedisRepository.addDoubleCounter(counter, value);
+    }
+
+    public void saveTicketPriceTime(LocalDateTime localDateTime, double price) {
+        statsRedisRepository.saveTicketPrice(String.valueOf(localDateTime.toEpochSecond(ZoneOffset.UTC)), price);
     }
 
     public StatisticsDTO calculateStatistics() {

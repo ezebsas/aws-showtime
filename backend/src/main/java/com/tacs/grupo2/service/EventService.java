@@ -26,6 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.support.TransactionTemplate;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -80,10 +81,12 @@ public class EventService {
                         throw new IllegalArgumentException("Requested quantity exceeds the maximum seats per user for this event");
                     }
 
+                    ticket.setCreatedAt(LocalDateTime.now());
                     var savedTicket = ticketRepository.save(ticket);
                     ticket.getEventSection().decreaseAvailableSeats(ticket.getQuantity());
                     eventSectionRepository.save(ticket.getEventSection());
 
+                    statsService.saveTicketPriceTime(ticket.getCreatedAt(), ticket.getTotal().doubleValue());
                     statsService.incrementCounter("TOTAL_TICKETS_SOLD");
                     statsService.addDoubleCounter("TOTAL_REVENUE", ticket.getTotal().doubleValue());
                     return ticketMapper.toDTO(savedTicket);

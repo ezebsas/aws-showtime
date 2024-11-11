@@ -12,6 +12,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -29,6 +30,9 @@ public class StatsRedisRepository {
     public Long getLongCounter(String counter) {
         String count = redisTemplate.opsForValue().get(counter);
         return count != null ? Long.parseLong(count) : 0L;
+    }
+    public void saveTicketPrice(long timestamp, Double price) {
+        redisTemplate.opsForZSet().add("TICKET:PRICES", timestamp, price);
     }
 
     public double getDoubleCounter(String counter) {
