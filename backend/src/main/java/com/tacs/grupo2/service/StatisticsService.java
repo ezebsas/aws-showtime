@@ -3,19 +3,19 @@ package com.tacs.grupo2.service;
 import com.tacs.grupo2.dto.EventDTO;
 import com.tacs.grupo2.dto.StatisticsDTO;
 import com.tacs.grupo2.dto.TicketDTO;
+import com.tacs.grupo2.repository.redis.StatsRedisRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
 
+@RequiredArgsConstructor
 @Service
 public class StatisticsService {
 
     private final EventService eventService;
-
-    public StatisticsService(EventService eventService) {
-        this.eventService = eventService;
-    }
+    private final StatsRedisRepository statsRedisRepository;
 
     public StatisticsDTO calculateStatistics() {
         List<EventDTO> events = eventService.getEvents();
