@@ -1,11 +1,9 @@
 package com.tacs.grupo2.repository.redis;
 
+import com.tacs.grupo2.utils.RedisTimeSeriesCommand;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.DataAccessException;
-import org.springframework.data.redis.RedisSystemException;
-import org.springframework.data.redis.core.RedisCallback;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
+import redis.clients.jedis.Jedis;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,38 +11,33 @@ import java.util.List;
 @RequiredArgsConstructor
 @Repository
 public class StatsRedisRepository {
-    private final RedisTemplate<String, String> redisTemplate;
+    private final Jedis jedis;
 
     public void incrementCounter(String counter) {
-        redisTemplate.opsForValue().increment(counter);
+        jedis.incr(counter);
     }
+
     public void addDoubleCounter(String counter, double value) {
-        redisTemplate.opsForValue().increment(counter, value);
+        jedis.incrByFloat(counter, value);
     }
 
     public Long getLongCounter(String counter) {
-        String count = redisTemplate.opsForValue().get(counter);
+        String count = jedis.get(counter);
         return count != null ? Long.parseLong(count) : 0L;
     }
 
     public void saveTicketPrice(long timestamp, Double price) {
         try {
-            redisTemplate.execute((RedisCallback<Object>) connection -> {
-                connection.execute("TS.ADD", "TICKET:PRICES".getBytes(), String.valueOf(timestamp).getBytes(), String.valueOf(price).getBytes());
-                return null;
-            });
-        } catch (RedisSystemException e) {
+            jedis.sendCommand(RedisTimeSeriesCommand.TS_ADD, "TICKET:PRICES", String.valueOf(timestamp), String.valueOf(price));
+        } catch (Exception e) {
             // Log the error message
-            System.out.println("RedisSystemException: " + e.getMessage());
-        } catch (DataAccessException e) {
-            // Log the error message
-            System.out.println("DataAccessException: " + e.getMessage());
+            System.out.println("Error saving ticket price: " + e.getMessage());
         }
     }
 
     public Double ticketsRange(long sinceTime) {
-        return redisTemplate.execute((RedisCallback<Double>) connection -> {
-            Object result = connection.execute("TS.RANGE", "TICKET:PRICES".getBytes(), "-".getBytes(), "+".getBytes(), "AGGREGATION".getBytes(), "SUM".getBytes(), String.valueOf(sinceTime).getBytes(), "COUNT".getBytes(), "1".getBytes());
+        try {
+            Object result = jedis.sendCommand(RedisTimeSeriesCommand.TS_REVRANGE, "TICKET:PRICES", "-", "+", "AGGREGATION", "SUM", String.valueOf(sinceTime), "COUNT", "1");
             if (result instanceof ArrayList) {
                 List<?> resultList = (List<?>) result;
                 if (!resultList.isEmpty() && resultList.get(0) instanceof List) {
@@ -54,11 +47,15 @@ public class StatsRedisRepository {
                     }
                 }
             }
-            return 0.0;
-        });
+        } catch (Exception e) {
+            // Log the error message
+            System.out.println("Error getting ticket range: " + e.getMessage());
+        }
+        return 0.0;
     }
+
     public double getDoubleCounter(String counter) {
-        String count = redisTemplate.opsForValue().get(counter);
+        String count = jedis.get(counter);
         return count != null ? Double.parseDouble(count) : 0.0;
     }
 }

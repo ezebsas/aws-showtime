@@ -10,6 +10,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPoolConfig;
 
 @Configuration
@@ -51,5 +52,14 @@ public class RedisConfig {
         template.setKeySerializer(new StringRedisSerializer());
         template.setValueSerializer(new GenericJackson2JsonRedisSerializer());
         return template;
+    }
+
+    @Bean
+    public Jedis jedis() {
+        Jedis jedis = new Jedis("localhost", 6379);  // Customize the host and port if needed
+        if (redisPassword != null && !redisPassword.isEmpty()) {
+            jedis.auth(redisPassword);
+        }
+        return jedis;
     }
 }
