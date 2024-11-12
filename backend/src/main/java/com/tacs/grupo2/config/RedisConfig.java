@@ -56,7 +56,7 @@ public class RedisConfig {
 
     @Bean
     public Jedis jedis() {
-        Jedis jedis = new Jedis("localhost", 6379);  // Customize the host and port if needed
+        Jedis jedis = new Jedis(redisHost, redisPort);  // Customize the host and port if needed
         if (redisPassword != null && !redisPassword.isEmpty()) {
             jedis.auth(redisPassword);
         }
