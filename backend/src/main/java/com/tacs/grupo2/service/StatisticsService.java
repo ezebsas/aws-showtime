@@ -1,16 +1,12 @@
 package com.tacs.grupo2.service;
 
-import com.tacs.grupo2.dto.EventDTO;
 import com.tacs.grupo2.dto.StatisticsDTO;
-import com.tacs.grupo2.dto.TicketDTO;
 import com.tacs.grupo2.repository.redis.StatsRedisRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -31,7 +27,7 @@ public class StatisticsService {
     }
 
     public void saveTicketPriceTime(LocalDateTime localDateTime, double price) {
-        statsRedisRepository.saveTicketPrice(String.valueOf(localDateTime.toEpochSecond(ZoneOffset.UTC)), price);
+        statsRedisRepository.saveTicketPrice(localDateTime.toInstant(ZoneOffset.UTC).toEpochMilli(), price);
     }
 
     public StatisticsDTO calculateStatistics() {
@@ -41,5 +37,15 @@ public class StatisticsService {
                 .totalTicketsSold(statsRedisRepository.getLongCounter("TOTAL_TICKETS_SOLD"))
                 .totalRevenue(statsRedisRepository.getDoubleCounter("TOTAL_REVENUE"))
                 .build();
+    }
+
+    public double getHourlyRevenue() {
+        return statsRedisRepository.ticketsRange(3600000);
+    }
+    public double getDailyRevenue() {
+        return statsRedisRepository.ticketsRange(86400000);
+    }
+    public double getWeeklyRevenue() {
+        return statsRedisRepository.ticketsRange(604800000);
     }
 }
