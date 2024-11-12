@@ -39,13 +39,13 @@ public class StatisticsService {
                 .build();
     }
 
-    public double getHourlyRevenue() {
+    public Double getHourlyRevenue() {
         return statsRedisRepository.ticketsRange(3600000);
     }
-    public double getDailyRevenue() {
+    public Double getDailyRevenue() {
         return statsRedisRepository.ticketsRange(86400000);
     }
-    public double getWeeklyRevenue() {
+    public Double getWeeklyRevenue() {
         return statsRedisRepository.ticketsRange(604800000);
     }
 }

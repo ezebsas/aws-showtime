@@ -7,6 +7,9 @@ import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RequiredArgsConstructor
 @Repository
 public class StatsRedisRepository {
@@ -40,26 +43,22 @@ public class StatsRedisRepository {
     }
 
     public Double ticketsRange(long sinceTime) {
-        //try {
-            return redisTemplate.execute((RedisCallback<Double>) connection -> {
-                byte[] result = (byte[]) connection.execute("TS.RANGE", "TICKET:PRICES".getBytes(), "-".getBytes(), "+".getBytes(), "AGGREGATION".getBytes(), "SUM".getBytes(), String.valueOf(sinceTime).getBytes(), "COUNT".getBytes(), "1".getBytes());
-                // Parse the result into a double value
-                return result != null ? Double.parseDouble(new String(result)) : 0.0;
-            });
-        /*} catch (Exception e) {
-            // Log the error message
-            System.out.println("RedisSystemException: " + e.getMessage());
-          RedisSystemException  System.out.println(e);
-
-        }
-         */
-        //return 0.0;
+        return redisTemplate.execute((RedisCallback<Double>) connection -> {
+            Object result = connection.execute("TS.RANGE", "TICKET:PRICES".getBytes(), "-".getBytes(), "+".getBytes(), "AGGREGATION".getBytes(), "SUM".getBytes(), String.valueOf(sinceTime).getBytes(), "COUNT".getBytes(), "1".getBytes());
+            if (result instanceof ArrayList) {
+                List<?> resultList = (List<?>) result;
+                if (!resultList.isEmpty() && resultList.get(0) instanceof List) {
+                    List<?> innerList = (List<?>) resultList.get(0);
+                    if (innerList.size() > 1 && innerList.get(1) instanceof byte[]) {
+                        return Double.parseDouble(new String((byte[]) innerList.get(1)));
+                    }
+                }
+            }
+            return 0.0;
+        });
     }
-
-
     public double getDoubleCounter(String counter) {
         String count = redisTemplate.opsForValue().get(counter);
         return count != null ? Double.parseDouble(count) : 0.0;
     }
-
 }
