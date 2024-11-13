@@ -30,7 +30,7 @@ public class CounterInitializerService {
                 jedis.del("TICKET:PRICES");
             }
             // Create the time series
-            jedis.sendCommand(RedisTimeSeriesCommand.TS_CREATE, "TICKET:PRICES", "RETENTION", "0", "LABELS", "type", "ticket_price");
+            jedis.sendCommand(RedisTimeSeriesCommand.TS_CREATE, "TICKET:PRICES", "RETENTION", "0", "LABELS", "type", "ticket_price", "DUPLICATE_POLICY", "SUM");
         } catch (Exception e) {
             // Log the exception or handle it as needed
             System.out.println("Error creating time series: " + e.getMessage());

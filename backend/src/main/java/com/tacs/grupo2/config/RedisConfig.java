@@ -11,6 +11,7 @@ import org.springframework.data.redis.repository.configuration.EnableRedisReposi
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
 @Configuration
@@ -61,5 +62,13 @@ public class RedisConfig {
             jedis.auth(redisPassword);
         }
         return jedis;
+    }
+    @Bean
+    public JedisPool jedisPool() {
+        JedisPoolConfig poolConfig = new JedisPoolConfig();
+        poolConfig.setMaxTotal(200); // Set the maximum number of connections
+        poolConfig.setMaxIdle(100);   // Set the maximum number of idle connections
+        poolConfig.setMinIdle(20);   // Set the minimum number of idle connections
+        return new JedisPool(poolConfig, "localhost", 6379); // Adjust host and port as needed
     }
 }

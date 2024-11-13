@@ -25,6 +25,9 @@ import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.support.TransactionTemplate;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.JedisPoolConfig;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -40,6 +43,7 @@ public class EventService {
     private final EventSectionRepository eventSectionRepository;
     private final PlatformTransactionManager transactionManager;
     private final StatisticsService statsService;
+    private final JedisPool jedisPool;
 
     public EventDTO createEvent(EventCreationDTO eventCreationDTO) {
         var event = eventMapper.toEvent(eventCreationDTO);
@@ -86,9 +90,13 @@ public class EventService {
                     ticket.getEventSection().decreaseAvailableSeats(ticket.getQuantity());
                     eventSectionRepository.save(ticket.getEventSection());
 
-                    statsService.saveTicketPriceTime(ticket.getCreatedAt(), ticket.getTotal().doubleValue());
-                    statsService.incrementCounter("TOTAL_TICKETS_SOLD");
-                    statsService.addDoubleCounter("TOTAL_REVENUE", ticket.getTotal().doubleValue());
+                    try (Jedis jedis = jedisPool.getResource()) {
+                        statsService.saveTicketPriceTime(ticket.getCreatedAt(), ticket.getTotal().doubleValue());
+                        statsService.incrementCounter("TOTAL_TICKETS_SOLD");
+                        statsService.addDoubleCounter("TOTAL_REVENUE", ticket.getTotal().doubleValue());
+                    } catch (Exception e) {
+                        log.error("Error interacting with Redis: ", e);
+                    }
                     return ticketMapper.toDTO(savedTicket);
                 });
             } catch (ObjectOptimisticLockingFailureException e) {

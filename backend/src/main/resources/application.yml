@@ -14,6 +14,13 @@ spring:
       host: ${REDIS_HOST:redis}
       port: ${REDIS_PORT:6379}
       password: ${REDIS_PASSWORD}
+      #connect-timeout: 60000
+      timeout: 5000
+      jedis:
+        pool:
+          max-active: 200
+          max-idle: 100
+          min-idle: 50
   jpa:
     show-sql: false
     hibernate:
