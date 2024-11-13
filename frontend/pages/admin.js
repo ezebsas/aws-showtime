@@ -9,9 +9,7 @@ const Admin = () => {
   return (
     <div>
       <HeaderAdmin setSelectedComponent={setSelectedComponent} />
-
-      {selectedComponent === 'statistics' && <Statistics />}
-      {selectedComponent === 'events' && <SpectacleListAdmin />}
+      <Statistics />
     </div>
   );
 };
