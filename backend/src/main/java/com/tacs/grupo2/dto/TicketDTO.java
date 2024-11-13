@@ -5,6 +5,7 @@ import lombok.Value;
 import org.springframework.hateoas.server.core.Relation;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Value
@@ -17,4 +18,5 @@ public class TicketDTO {
     Long eventSectionId;
     BigDecimal total;
     Integer quantity;
+    LocalDateTime createdAt;
 }

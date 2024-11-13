@@ -66,9 +66,10 @@ public class RedisConfig {
     @Bean
     public JedisPool jedisPool() {
         JedisPoolConfig poolConfig = new JedisPoolConfig();
+        poolConfig.setJmxEnabled(false);
         poolConfig.setMaxTotal(200); // Set the maximum number of connections
         poolConfig.setMaxIdle(100);   // Set the maximum number of idle connections
         poolConfig.setMinIdle(20);   // Set the minimum number of idle connections
-        return new JedisPool(poolConfig, "localhost", 6379); // Adjust host and port as needed
+        return new JedisPool(poolConfig, redisHost, redisPort, 2000, redisPassword); // Adjust host and port as needed
     }
 }

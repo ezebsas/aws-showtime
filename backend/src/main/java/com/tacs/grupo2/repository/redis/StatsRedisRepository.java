@@ -4,6 +4,7 @@ import com.tacs.grupo2.utils.RedisTimeSeriesCommand;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,14 +12,25 @@ import java.util.List;
 @RequiredArgsConstructor
 @Repository
 public class StatsRedisRepository {
+    private final JedisPool jedisPool;
     private final Jedis jedis;
 
     public void incrementCounter(String counter) {
-        jedis.incr(counter);
+        try (Jedis jedis = jedisPool.getResource()) {
+            jedis.incr(counter);
+        } catch (Exception e) {
+            // Handle exception
+            e.printStackTrace();
+        }
     }
 
     public void addDoubleCounter(String counter, double value) {
-        jedis.incrByFloat(counter, value);
+        try (Jedis jedis = jedisPool.getResource()) {
+            jedis.incrByFloat(counter, value);
+        } catch (Exception e) {
+            // Handle exception
+            e.printStackTrace();
+        }
     }
 
     public Long getLongCounter(String counter) {
@@ -27,11 +39,17 @@ public class StatsRedisRepository {
     }
 
     public void saveTicketPrice(long timestamp, Double price) {
-        try {
+        /*try {
             jedis.sendCommand(RedisTimeSeriesCommand.TS_ADD, "TICKET:PRICES", String.valueOf(timestamp), String.valueOf(price));
         } catch (Exception e) {
             // Log the error message
             System.out.println("Error saving ticket price: " + e.getMessage());
+        }*/
+        try (Jedis jedis = jedisPool.getResource()) {
+            jedis.sendCommand(RedisTimeSeriesCommand.TS_ADD, "TICKET:PRICES", String.valueOf(timestamp), String.valueOf(price));
+        } catch (Exception e) {
+            // Handle exception
+            e.printStackTrace();
         }
     }
 

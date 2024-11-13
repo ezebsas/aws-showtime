@@ -13,72 +13,64 @@ const Statistics = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true); // Loading state
 
-  /*
-  useEffect(() => {
-    // Fetch statistics data from API or local storage
-    const fetchStats = async () => {
-      try {
-        const response = await axios.get(`${config.url}events/statistics`);
-        setStats(response.data);
-      } catch (error) {
-        setError(error.message);
-      }
-    };
-    fetchStats();
-  }, []);
-  */
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true); // Start loading
 
       if (jwt) {
         try {
-          // Fetch spectacle
+          // Fetch statistics
           let response = await axios.get(`${config.url}stats`, {
             headers: {
               Authorization: `Bearer ${jwt}`,
             },
           });
-          setStats(response.data); // Set the fetched spectacle
+          setStats(response.data); // Set the fetched statistics
+
+          // Fetch hourly revenue
           response = await axios.get(`${config.url}stats/hourly-sales`, {
             headers: {
               Authorization: `Bearer ${jwt}`,
             },
           });
-          setHourlyRevenue(response.data); // Set the fetched spectacle
+          setHourlyRevenue(response.data); // Set the fetched hourly revenue
+
+          // Fetch daily revenue
           response = await axios.get(`${config.url}stats/daily-sales`, {
             headers: {
               Authorization: `Bearer ${jwt}`,
             },
           });
-          setDailyRevenue(response.data); // Set the fetched spectacle
+          setDailyRevenue(response.data); // Set the fetched daily revenue
+
+          // Fetch weekly revenue
           response = await axios.get(`${config.url}stats/weekly-sales`, {
             headers: {
               Authorization: `Bearer ${jwt}`,
             },
           });
-          setWeeklyRevenue(response.data); // Set the fetched spectacle
+          setWeeklyRevenue(response.data); // Set the fetched weekly revenue
 
-          // Redirect if spectacle is not found
         } catch (error) {
           console.error('Error fetching data:', error);
-          setError(true);
+          setError(error.message); // Set the error message
         } finally {
           setLoading(false); // Set loading to false after fetch attempt
         }
       } else {
-        setLoading(false); // Set loading to false if jwt or id is not available
+        setLoading(false); // Set loading to false if jwt is not available
       }
     };
 
     fetchData();
-  }, [jwt]); // Dependency array includes jwt and id
+  }, [jwt]); // Dependency array includes jwt
 
   return (
     <div className={styles.statistics}>
       <h2>Statistics</h2>
+      {loading && <p>Loading...</p>} {/* Show loading message */}
       {error && <p className={styles.error}>{error}</p>}
-      {stats && (
+      {!loading && stats && (
         <>
           <p>Unique users: {stats.uniqueUsers}</p>
           <p>Total events: {stats.totalEvents}</p>

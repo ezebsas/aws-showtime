@@ -12,22 +12,17 @@ import com.tacs.grupo2.mapper.TicketMapper;
 import com.tacs.grupo2.repository.EventRepository;
 import com.tacs.grupo2.repository.EventSectionRepository;
 import com.tacs.grupo2.repository.TicketRepository;
+import com.tacs.grupo2.repository.redis.StatsRedisRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.LockModeType;
-import jakarta.persistence.OptimisticLockException;
 import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.annotation.Propagation;
 import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.support.TransactionTemplate;
-import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
-import redis.clients.jedis.JedisPoolConfig;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -43,7 +38,7 @@ public class EventService {
     private final EventSectionRepository eventSectionRepository;
     private final PlatformTransactionManager transactionManager;
     private final StatisticsService statsService;
-    private final JedisPool jedisPool;
+    private final StatsRedisRepository statsRedisRepository;
 
     public EventDTO createEvent(EventCreationDTO eventCreationDTO) {
         var event = eventMapper.toEvent(eventCreationDTO);
@@ -60,7 +55,7 @@ public class EventService {
     private EntityManager entityManager;
 
     public TicketDTO createTicket(TicketCreationDTO ticketCreationDTO, Long id) {
-        int maxRetries = 10;
+        int maxRetries = 15;
         int attempt = 1;
         long backoff = 500; // Initial backoff time in milliseconds
         TransactionTemplate transactionTemplate = new TransactionTemplate(transactionManager);
@@ -90,13 +85,10 @@ public class EventService {
                     ticket.getEventSection().decreaseAvailableSeats(ticket.getQuantity());
                     eventSectionRepository.save(ticket.getEventSection());
 
-                    try (Jedis jedis = jedisPool.getResource()) {
-                        statsService.saveTicketPriceTime(ticket.getCreatedAt(), ticket.getTotal().doubleValue());
-                        statsService.incrementCounter("TOTAL_TICKETS_SOLD");
-                        statsService.addDoubleCounter("TOTAL_REVENUE", ticket.getTotal().doubleValue());
-                    } catch (Exception e) {
-                        log.error("Error interacting with Redis: ", e);
-                    }
+                    //statsService.saveTicketPriceTime(ticket.getCreatedAt(), ticket.getTotal().doubleValue());
+                    //statsService.incrementCounter("TOTAL_TICKETS_SOLD");
+                    //statsService.addDoubleCounter("TOTAL_REVENUE", ticket.getTotal().doubleValue());
+                    //statsRedisRepository.incrementCounter("TOTAL_TICKETS_SOLD");
                     return ticketMapper.toDTO(savedTicket);
                 });
             } catch (ObjectOptimisticLockingFailureException e) {

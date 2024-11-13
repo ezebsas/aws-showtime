@@ -17,5 +17,6 @@ public interface TicketMapper {
 
     @Mapping(target = "userId", source = "user.id")
     @Mapping(target = "eventSectionId", source = "eventSection.id")
+    @Mapping(target = "createdAt", source = "createdAt")
     TicketDTO toDTO(Ticket ticket);
 }

@@ -17,26 +17,6 @@ const Confirmed = () => {
   const [loading, setLoading] = useState(true); // Loading state
   const [error, setError] = useState(false);
 
-  /*
-  useEffect(() => {
-    const fetchPurchase = async () => {
-      const data = 
-        {
-            id: '1',
-            title: 'Rock concert',
-            date: '2023-12-01',
-            hour: '21:00',
-            ubication: 'Estadio unico de la plata',
-            quantity: 4,
-        };
-      setPurchase(data);
-    };
-
-    if (id) {
-      fetchPurchase();
-    }
-  }, [id]);
-  */
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true); // Start loading
@@ -63,7 +43,7 @@ const Confirmed = () => {
               Authorization: `Bearer ${jwt}`,
             },
           });
-          purchaseResponse.data.date = Date(purchaseResponse.data.date);
+          purchaseResponse.data.date = new Date(purchaseResponse.data.date).toLocaleString(); // Format date
           setPurchase(purchaseResponse.data); // Set the fetched venue
         } catch (error) {
           console.error('Error fetching data:', error);
@@ -77,10 +57,18 @@ const Confirmed = () => {
     };
 
     fetchData();
-  }, [jwt, id, router]); // Dependency array includes jwt and id
+  }, [jwt, id, cart, router]); // Include cart in the dependency array
+
+  if (loading) {
+    return <div>Loading...</div>; // Show loading state
+  }
+
+  if (error) {
+    return <div>Error fetching data. Please try again later.</div>; // Show error state
+  }
 
   if (!purchase) {
-    return <div>Charging...</div>;
+    return <div>Charging...</div>; // Fallback if purchase is not available
   }
 
   return (
@@ -88,16 +76,15 @@ const Confirmed = () => {
       <Header />
       <div className="container">
         <div className="purchase-details">
-          <h2>Purchase confirmed for "{purchase.name}"</h2>
+          <h2>Purchase confirmed for &quot;{purchase.name}&quot;</h2>
           <p style={{fontWeight: 600}}>Congratulations, you have purchased your tickets for {purchase.name}</p>
 
-          <hr></hr>
+          <hr />
 
           <p>Date: {purchase.date}</p>
           <p>Ubication: {ticket.eventSectionId}</p>
           
-
-          <hr></hr>
+          <hr />
 
           <div className='purchase-shower'>
             <p>Quant</p>
@@ -108,8 +95,8 @@ const Confirmed = () => {
           </div>
 
           <div className='modal-buttons'>
-            <button onClick={()=>{router.push('/')}}>Back home</button>
-            <button onClick={()=>{router.push('/bookings')}}>Go to my tickets</button>
+            <button onClick={() => { router.push('/'); }}>Back home</button>
+            <button onClick={() => { router.push('/bookings'); }}>Go to my tickets</button>
           </div>
 
         </div>

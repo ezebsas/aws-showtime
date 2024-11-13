@@ -1,7 +1,16 @@
+import Image from 'next/image';
+
 const SpectacleItem = ({ spectacle }) => {
     return (
       <div className="spectacle-item">
-        <img src={spectacle.image} alt={spectacle.title} className="spectacle-image" />
+        <Image 
+          src={spectacle.image} 
+          alt={spectacle.title} 
+          className="spectacle-image" 
+          width={500}
+          height={300}
+          layout="responsive"
+        />
         <div className="spectacle-info">
           <h2 className="spectacle-title">{spectacle.title}</h2>
           <p className="spectacle-description">{spectacle.description}</p>
